@@ -1,10 +1,11 @@
+using BlockBlast.Scripts.Game;
 using UnityEditor;
 using UnityEngine;
 
-namespace BlockBlast.Scripts.Game
+namespace BlockBlast.Scripts.Editor
 {
-    [CustomEditor(typeof(BoolGrid))]
-    public class BoolGridEditor : Editor
+    [CustomEditor(typeof(IntGrid))]
+    public class BoolGridEditor : UnityEditor.Editor
     {
         private Texture2D myTexture;
         private GUIStyle textureButtonStyle;
@@ -24,7 +25,7 @@ namespace BlockBlast.Scripts.Game
             };
             
             var buttonContent = new GUIContent(myTexture);
-            var gridTarget = (BoolGrid)target;
+            var gridTarget = (IntGrid)target;
 
             EditorGUI.BeginChangeCheck();
 

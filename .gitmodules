@@ -1,0 +1,3 @@
+[submodule "Assets/Common"]
+	path = Assets/Common
+	url = git@github.com:Seven-Winds-Studio/CommonPrototype.git

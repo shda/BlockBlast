@@ -2,25 +2,16 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class GameBoardModel
-    {
-        public bool[,] Grid { get; set; }
-
-        public GameBoardModel(int width, int height)
-        {
-            Grid = new bool[width, height];
-        }
-    }
-    
     public class GameBoard : MonoBehaviour
     {
+        [SerializeField] private GameBoardGridSettings  boardGridSettings;
         [SerializeField] private Vector2Int gridSize;
         
-        public bool[,] Grid;
+        public int[,] Grid { get; set; }
 
         private void Awake()
         {
-            Grid = new bool[gridSize.x, gridSize.y];
+            Grid = new int[boardGridSettings.GridSize.x, boardGridSettings.GridSize.y];
         }
     }
 }

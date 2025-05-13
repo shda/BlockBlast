@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
@@ -10,6 +9,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private Vector2 gridStep;
         
         public Vector2 GridStep => gridStep;
+        public Vector2Int GridSize => gridSize;
         
         private void OnDrawGizmosSelected()
         {
