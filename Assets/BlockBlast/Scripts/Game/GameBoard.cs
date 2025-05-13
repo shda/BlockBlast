@@ -7,17 +7,19 @@ namespace BlockBlast.Scripts.Game
     public class GameBoard : MonoBehaviour
     {
         [SerializeField] private CrystalPool crystalPool;
-        [SerializeField] private GameBoardGridSettings  boardGridSettings;
+        [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private Vector2Int gridSize;
-        
-        public int[,] Grid { get; set; }
 
+        public int[,] Grid { get; set; }
+        public Crystal[,] Crystals { get; set; }
+        
         private List<Crystal> tempCrystals = new();
         private bool _isCanSetShape;
-        
+
         private void Awake()
         {
             Grid = new int[boardGridSettings.GridSize.x, boardGridSettings.GridSize.y];
+            Crystals = new Crystal[boardGridSettings.GridSize.x, boardGridSettings.GridSize.y];
         }
 
         public void RemoveTempShape()
@@ -26,6 +28,7 @@ namespace BlockBlast.Scripts.Game
             {
                 crystalPool.Release(tempCrystal);
             }
+
             tempCrystals.Clear();
         }
 
@@ -35,20 +38,17 @@ namespace BlockBlast.Scripts.Game
             {
                 var coord = tempCrystal.Coordinates;
                 Grid[coord.x, coord.y] = 1;
-
-                SetCristal(new Vector2Int(coord.x, coord.y) , tempCrystal.transform.position);
+                Crystals[coord.x, coord.y] = SetCristal(new Vector2Int(coord.x, coord.y), tempCrystal.transform.position);
             }
 
             RemoveTempShape();
         }
-        
+
         public bool SetTempShape(Shape shape, Vector3 point)
         {
             _isCanSetShape = false;
             RemoveTempShape();
 
-           // point -= new Vector3(5, shape.Size.y * 0.5f, 0);
-            
             var gridStep = boardGridSettings.GridStep;
             var startGrid = boardGridSettings.transform.position;
             var pointStartShape = point - startGrid;
@@ -66,12 +66,12 @@ namespace BlockBlast.Scripts.Game
                         continue;
 
                     var positionInGrid = new Vector2Int(
-                        startPosX + x, 
+                        startPosX + x,
                         startPosY + y);
-                    
+
                     var position = startGrid + startPosition + new Vector3(x * gridStep.x, y * gridStep.y, 0);
                     Debug.DrawLine(position, Vector3.zero, Color.red);
-                    
+
                     var outOfBounds =
                         position.x < startGrid.x ||
                         position.y < startGrid.y ||
@@ -83,21 +83,27 @@ namespace BlockBlast.Scripts.Game
                         RemoveTempShape();
                         return false;
                     }
-                    
-                    
-                    tempCrystals.Add(SetCristal(new Vector2Int(positionInGrid.x , positionInGrid.y) , position));
+
+
+                    tempCrystals.Add(SetCristal(new Vector2Int(positionInGrid.x, positionInGrid.y), position));
                 }
             }
 
             return true;
         }
 
-        private Crystal SetCristal(Vector2Int point , Vector3 position)
+        private Crystal SetCristal(Vector2Int point, Vector3 position)
         {
             var newCrystal = crystalPool.Get();
             newCrystal.transform.position = position;
-            newCrystal.Coordinates = new Vector2Int(point.x , point.y);
+            newCrystal.Coordinates = new Vector2Int(point.x, point.y);
             return newCrystal;
+        }
+
+        public void ClearPoint(Vector2Int coordinates)
+        {
+            Grid[coordinates.x, coordinates.y] = 0;
+            Crystals[coordinates.x, coordinates.y] = null;
         }
     }
 }

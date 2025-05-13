@@ -387,6 +387,8 @@ MonoBehaviour:
   gameBoard: {fileID: 1435043828}
   shapesPanel: {fileID: 384512638}
   dragHandler: {fileID: 550083491}
+  boardGridSettings: {fileID: 1435043827}
+  crystalPool: {fileID: 550083490}
 --- !u!114 &550083490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 4210361757906221607, guid: 0a5c528df8331124f9aba3da75783432, type: 3}
-  initialPoolSize: 100
+  initialPoolSize: 5
 --- !u!114 &550083491
 MonoBehaviour:
   m_ObjectHideFlags: 0
