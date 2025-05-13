@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4827847352626297082}
   - component: {fileID: 6956403126488654904}
   - component: {fileID: 1047909988061793854}
+  - component: {fileID: 6604975364884516611}
   m_Layer: 0
   m_Name: ShapeBase
   m_TagString: Untagged
@@ -114,3 +115,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!210 &6604975364884516611
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3978324733457427153}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 30
+  m_SortAtRoot: 0

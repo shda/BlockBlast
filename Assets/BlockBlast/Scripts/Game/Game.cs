@@ -14,7 +14,7 @@ namespace BlockBlast.Scripts.Game
 
         private bool _isCanSetShape;
         private Shape _dragShape;
-        
+
         private void Awake()
         {
             dragHandler.OnDragShape = OnDragShape;
@@ -27,7 +27,7 @@ namespace BlockBlast.Scripts.Game
             {
                 gameBoard.SetShapeFromTemp();
                 gameBoard.RemoveTempShape();
-                
+
                 shapesPanel.RemoveShape(_dragShape);
 
                 CheckFullLines();
@@ -42,55 +42,36 @@ namespace BlockBlast.Scripts.Game
         {
             var size = boardGridSettings.GridSize;
 
-            var crystals = new List<Crystal>();
-
-            for (int x = 0; x < size.x; x++)
+            void CheckLines(bool isRow)
             {
-                for (int y = 0; y < size.y; y++)
+                for (int i = 0; i < (isRow ? size.x : size.y); i++)
                 {
-                    var point = gameBoard.Grid[x, y];
-                    if (point > 0)
+                    var crystals = new List<Crystal>();
+                    for (int j = 0; j < (isRow ? size.y : size.x); j++)
                     {
-                        crystals.Add(gameBoard.Crystals[x , y]);
+                        int x = isRow ? i : j;
+                        int y = isRow ? j : i;
+                        var point = gameBoard.Grid[x, y];
+                        if (point > 0)
+                        {
+                            crystals.Add(gameBoard.Crystals[x, y]);
+                        }
+                        else
+                        {
+                            crystals.Clear();
+                            break;
+                        }
                     }
-                    else
-                    {
-                        crystals.Clear();
-                        break;
-                    }
-                }
 
-                if (crystals.Count > 0)
-                {
-                    HideCrystals(crystals);
+                    if (crystals.Count > 0)
+                    {
+                        HideCrystals(crystals);
+                    }
                 }
-                
-                crystals.Clear();
             }
-            
-            for (int y = 0; y < size.y; y++)
-            {
-                for (int x = 0; x < size.x; x++)
-                {
-                    var point = gameBoard.Grid[x, y];
-                    if (point > 0)
-                    {
-                        crystals.Add(gameBoard.Crystals[x , y]);
-                    }
-                    else
-                    {
-                        crystals.Clear();
-                        break;
-                    }
-                }
 
-                if (crystals.Count > 0)
-                {
-                    HideCrystals(crystals);
-                }
-                
-                crystals.Clear();
-            }
+            CheckLines(true); // Проверка строк
+            CheckLines(false); // Проверка столбцов
         }
 
         private void HideCrystals(List<Crystal> crystals)
@@ -109,7 +90,7 @@ namespace BlockBlast.Scripts.Game
         private void OnDragShape(Shape shape, Vector3 point)
         {
             _dragShape = shape;
-            _isCanSetShape = gameBoard.SetTempShape(shape , point);
+            _isCanSetShape = gameBoard.SetTempShape(shape, point);
         }
 
         private void Start()

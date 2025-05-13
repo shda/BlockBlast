@@ -25,11 +25,10 @@ namespace BlockBlast.Scripts.Game
                 _dragStatus = DragStatus.Drag;
                 
                 Vector2 mouseWorldPos = camera.ScreenToWorldPoint(Input.mousePosition);
-                Collider2D hitCollider = Physics2D.OverlapPoint(mouseWorldPos);
+                var hitCollider = Physics2D.OverlapPoint(mouseWorldPos);
 
-                if (hitCollider != null && hitCollider is BoxCollider2D)
+                if (hitCollider && hitCollider is BoxCollider2D dragBoxCollider)
                 {
-                    var dragBoxCollider = hitCollider as BoxCollider2D;
                     _selectedShape = dragBoxCollider.GetComponent<Shape>();
                     _offset = dragBoxCollider.transform.position - new Vector3(mouseWorldPos.x , mouseWorldPos.y, 0);
                     _offset -= offsetScroll;
