@@ -10,5 +10,10 @@ namespace BlockBlast.Scripts.Game
         {
             return Instantiate(shapePrefabs[Random.Range(0, shapePrefabs.Length)]);
         }
+
+        public void RemoveShape(Shape shape)
+        {
+            
+        }
     }
 }

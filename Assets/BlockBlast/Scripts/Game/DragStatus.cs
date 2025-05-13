@@ -4,6 +4,5 @@ namespace BlockBlast.Scripts.Game
     {
         None,
         Drag,
-        Complete,
     }
 }

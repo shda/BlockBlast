@@ -5,6 +5,6 @@ namespace BlockBlast.Scripts.Game
 {
     public class Crystal : MonoBehaviour
     {
-        [ReadOnly] private Vector2 coordinates;
+        public Vector2Int Coordinates { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
@@ -7,8 +8,8 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private IntGrid grid;
         [SerializeField] private BoxCollider2D collider2d;
 
+        private List<Crystal> _crystals = new ();
         public IntGrid Grid => grid;
-        
         public Vector2 Size => collider2d.size;
 
         public void CreateCrystals(
@@ -26,23 +27,34 @@ namespace BlockBlast.Scripts.Game
                         var newCristal = crystalPool.Get();
                         newCristal.transform.parent = transform;
                         newCristal.transform.localPosition = new Vector3(step.x * x , step.y * y , 0);
+                        newCristal.transform.localScale = Vector3.one;
+                        
+                        _crystals.Add(newCristal);
                     }
                 }
 
-            ResizeCollider(grid.width , grid.height , boardGridSettings);
+            ResizeCollider(grid.width , grid.height);
         }
 
         private void ResizeCollider(
-            int width, int height , 
-            GameBoardGridSettings boardGridSettings)
+            int width, int height )
         {
             var x =  (width - 1) * 0.5f;
             var y =  (height - 1) * 0.5f;
             
-            
             Vector2 offset = new Vector2(x > 0 ?x : 0, y > 0 ? y : 0);
             collider2d.size = new Vector2(width, height);
             collider2d.offset = offset;
+        }
+
+        public void ReleaseCrystals(CrystalPool crystalPool)
+        {
+            foreach (var crystal in _crystals)
+            {
+                crystalPool.Release(crystal);
+            }
+            
+            _crystals.Clear();
         }
     }
 }

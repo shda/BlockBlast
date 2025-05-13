@@ -171,6 +171,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02074c94c364e459ac0b80c116e03a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shapeCollection: {fileID: 1731412340}
+  crystalPool: {fileID: 550083490}
+  boardGridSettings: {fileID: 1435043827}
   scaleToPanel: 0.5
   maxShapes: 3
   shapePoint:
@@ -382,10 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameBoard: {fileID: 1435043828}
-  boardGridSettings: {fileID: 1435043827}
   shapesPanel: {fileID: 384512638}
-  shapeCollection: {fileID: 1731412340}
-  crystalPool: {fileID: 550083490}
   dragHandler: {fileID: 550083491}
 --- !u!114 &550083490
 MonoBehaviour:
@@ -414,6 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 519420031}
+  offsetScroll: {x: 5, y: 0}
 --- !u!1 &717022184
 GameObject:
   m_ObjectHideFlags: 0

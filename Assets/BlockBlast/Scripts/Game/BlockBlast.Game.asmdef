@@ -2,7 +2,8 @@
     "name": "BlockBlast.Game",
     "rootNamespace": "",
     "references": [
-        "GUID:0595321fbb39e914aa5744bbee972aa7"
+        "GUID:0595321fbb39e914aa5744bbee972aa7",
+        "GUID:029c1c1b674aaae47a6841a0b89ad80e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
