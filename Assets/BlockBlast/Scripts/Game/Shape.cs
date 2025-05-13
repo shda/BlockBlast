@@ -8,7 +8,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private IntGrid grid;
         [SerializeField] private BoxCollider2D collider2d;
 
-        private List<Crystal> _crystals = new ();
+        private readonly List<Crystal> _crystals = new ();
         public IntGrid Grid => grid;
         public Vector2 Size => collider2d.size;
 

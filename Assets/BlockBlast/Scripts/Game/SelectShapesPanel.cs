@@ -1,25 +1,24 @@
 using System.Collections.Generic;
 using BlockBlast.Scripts.Common.Extensions;
-using Unity.Collections;
 using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class ShapesPanel : MonoBehaviour
+    public class SelectShapesPanel : MonoBehaviour
     {
         [SerializeField] private ShapeCollection shapeCollection;
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameBoardGridSettings  boardGridSettings;
         
         [SerializeField] private float scaleToPanel = 0.3f;
-        [SerializeField] private int maxShapes = 3;
+        [SerializeField] private int maxCountShapes = 3;
         [SerializeField] private Transform[] shapePoint;
         
-        private List<Shape> _shapes = new();
-        
-        public void AddShape(Shape shape)
+        private readonly List<Shape> _shapes = new();
+
+        private void AddShape(Shape shape)
         {
-            if(_shapes.Count >= maxShapes)
+            if(_shapes.Count >= maxCountShapes)
                return;
             
             _shapes.Add(shape);
@@ -36,15 +35,15 @@ namespace BlockBlast.Scripts.Game
 
             if (_shapes.EmptyOnNull())
             {
-                CreateShapes();
+                CreateNewShapes();
             }
         }
 
-        public void CreateShapes()
+        public void CreateNewShapes()
         {
-            for (int i = 0; i < maxShapes; i++)
+            for (int i = 0; i < maxCountShapes; i++)
             {
-                var newShape = shapeCollection.CrateRandomShape();
+                var newShape = shapeCollection.CreateRandomShape();
                 newShape.CreateCrystals(crystalPool , boardGridSettings);
                 AddShape(newShape);
             }

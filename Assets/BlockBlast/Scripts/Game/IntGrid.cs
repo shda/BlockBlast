@@ -7,7 +7,7 @@ namespace BlockBlast.Scripts.Game
     [Serializable]
     public class IntRow
     {
-        public List<int> row = new List<int>();
+        public List<int> row = new();
     }
 
     public class IntGrid : MonoBehaviour

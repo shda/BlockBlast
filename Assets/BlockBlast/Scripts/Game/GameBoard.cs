@@ -9,16 +9,14 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private Vector2Int gridSize;
-
-        public int[,] Grid { get; set; }
-        public Crystal[,] Crystals { get; set; }
+        
+        public Crystal[,] Crystals { get; private set; }
         
         private List<Crystal> tempCrystals = new();
         private bool _isCanSetShape;
 
         private void Awake()
         {
-            Grid = new int[boardGridSettings.GridSize.x, boardGridSettings.GridSize.y];
             Crystals = new Crystal[boardGridSettings.GridSize.x, boardGridSettings.GridSize.y];
         }
 
@@ -37,7 +35,6 @@ namespace BlockBlast.Scripts.Game
             foreach (var tempCrystal in tempCrystals)
             {
                 var coord = tempCrystal.Coordinates;
-                Grid[coord.x, coord.y] = 1;
                 Crystals[coord.x, coord.y] = SetCristal(new Vector2Int(coord.x, coord.y), tempCrystal.transform.position);
             }
 
@@ -78,13 +75,12 @@ namespace BlockBlast.Scripts.Game
                         position.x >= startGrid.x + gridStep.x * boardGridSettings.GridSize.x ||
                         position.y >= startGrid.y + gridStep.y * boardGridSettings.GridSize.y - 0.1f;
 
-                    if (outOfBounds || Grid[positionInGrid.x, positionInGrid.y] > 0)
+                    if (outOfBounds || Crystals[positionInGrid.x, positionInGrid.y])
                     {
                         RemoveTempShape();
                         return false;
                     }
-
-
+                    
                     tempCrystals.Add(SetCristal(new Vector2Int(positionInGrid.x, positionInGrid.y), position));
                 }
             }
@@ -102,7 +98,6 @@ namespace BlockBlast.Scripts.Game
 
         public void ClearPoint(Vector2Int coordinates)
         {
-            Grid[coordinates.x, coordinates.y] = 0;
             Crystals[coordinates.x, coordinates.y] = null;
         }
     }

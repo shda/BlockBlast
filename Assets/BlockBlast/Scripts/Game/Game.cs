@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
     public class Game : MonoBehaviour
     {
         [SerializeField] private GameBoard gameBoard;
-        [SerializeField] private ShapesPanel shapesPanel;
-        [SerializeField] private DragHandler dragHandler;
+        [SerializeField] private SelectShapesPanel selectShapesPanel;
+        [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
 
@@ -17,24 +18,29 @@ namespace BlockBlast.Scripts.Game
 
         private void Awake()
         {
-            dragHandler.OnDragShape = OnDragShape;
-            dragHandler.OnStopDragShape = OnStopDragShape;
+            ConnectEvents();
         }
 
-        private void OnStopDragShape()
+        private void ConnectEvents()
+        {
+            dragShapeHandler.OnDragShape = OnDragShape;
+            dragShapeHandler.OnCompleteDragShape = OnCompleteDragShape;
+        }
+
+        private void OnCompleteDragShape()
         {
             if (_isCanSetShape)
             {
                 gameBoard.SetShapeFromTemp();
                 gameBoard.RemoveTempShape();
 
-                shapesPanel.RemoveShape(_dragShape);
+                selectShapesPanel.RemoveShape(_dragShape);
 
                 CheckFullLines();
             }
             else
             {
-                dragHandler.ReturnShapeToDefault();
+                dragShapeHandler.ReturnShapeToDefault();
             }
         }
 
@@ -42,17 +48,19 @@ namespace BlockBlast.Scripts.Game
         {
             var size = boardGridSettings.GridSize;
 
+            CheckLines(true); // Проверка строк
+            CheckLines(false); // Проверка столбцов
             void CheckLines(bool isRow)
             {
-                for (int i = 0; i < (isRow ? size.x : size.y); i++)
+                for (var i = 0; i < (isRow ? size.x : size.y); i++)
                 {
                     var crystals = new List<Crystal>();
-                    for (int j = 0; j < (isRow ? size.y : size.x); j++)
+                    for (var j = 0; j < (isRow ? size.y : size.x); j++)
                     {
                         int x = isRow ? i : j;
                         int y = isRow ? j : i;
-                        var point = gameBoard.Grid[x, y];
-                        if (point > 0)
+                        var point = gameBoard.Crystals[x, y];
+                        if (point != null)
                         {
                             crystals.Add(gameBoard.Crystals[x, y]);
                         }
@@ -65,16 +73,13 @@ namespace BlockBlast.Scripts.Game
 
                     if (crystals.Count > 0)
                     {
-                        HideCrystals(crystals);
+                        RemovingCrystalsLine(crystals);
                     }
                 }
             }
-
-            CheckLines(true); // Проверка строк
-            CheckLines(false); // Проверка столбцов
         }
 
-        private void HideCrystals(List<Crystal> crystals)
+        private void RemovingCrystalsLine(List<Crystal> crystals)
         {
             foreach (var crystal in crystals)
             {
@@ -87,15 +92,15 @@ namespace BlockBlast.Scripts.Game
             }
         }
 
-        private void OnDragShape(Shape shape, Vector3 point)
+        private void OnDragShape(Shape shape, Vector3 pointShape)
         {
             _dragShape = shape;
-            _isCanSetShape = gameBoard.SetTempShape(shape, point);
+            _isCanSetShape = gameBoard.SetTempShape(shape, pointShape);
         }
 
         private void Start()
         {
-            shapesPanel.CreateShapes();
+            selectShapesPanel.CreateNewShapes();
         }
     }
 }

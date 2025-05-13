@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class DragHandler : MonoBehaviour
+    public class DragShapeHandler : MonoBehaviour
     {
         [SerializeField] private Camera camera;
         [SerializeField] private Vector2 offsetScroll = new(5f, 0f);
         public Action<Shape, Vector3> OnDragShape;
-        public Action OnStopDragShape;
+        public Action OnCompleteDragShape;
         
         private DragStatus _dragStatus = DragStatus.None;
         private Shape _selectedShape;
@@ -54,7 +54,7 @@ namespace BlockBlast.Scripts.Game
                 if (_dragStatus == DragStatus.Drag)
                 {
                     _dragStatus = DragStatus.None;
-                    OnStopDragShape?.Invoke();
+                    OnCompleteDragShape?.Invoke();
                 }
             }
         }

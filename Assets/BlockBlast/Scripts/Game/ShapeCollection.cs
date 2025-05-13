@@ -6,14 +6,9 @@ namespace BlockBlast.Scripts.Game
     {
         [SerializeField] private Shape[] shapePrefabs;
 
-        public Shape CrateRandomShape()
+        public Shape CreateRandomShape()
         {
             return Instantiate(shapePrefabs[Random.Range(0, shapePrefabs.Length)]);
-        }
-
-        public void RemoveShape(Shape shape)
-        {
-            
         }
     }
 }
