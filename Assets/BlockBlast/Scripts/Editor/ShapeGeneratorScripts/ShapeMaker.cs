@@ -60,18 +60,6 @@ namespace BlockBlast.Scripts.Editor.ShapeGeneratorScripts
 
                     CreateShape(matrix , path , index);
                     index++;
-                    /*
-                    // Выводим матрицу
-                    Debug.Log("Новый блок:");
-                    for (int i = 0; i < rows; i++)
-                    {
-                        for (int j = 0; j < cols; j++)
-                        {
-                            Debug.Log(matrix[i, j]);
-                        }
-                        Debug.Log("");
-                    }
-                    */
                 }
             }
         }

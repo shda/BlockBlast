@@ -133,10 +133,8 @@ namespace BlockBlast.Scripts.Game
             }
         }
 
-        private async void RemovingCrystalsLine(IEnumerable<Crystal> crystals)
+        private void RemovingCrystalsLine(IEnumerable<Crystal> crystals)
         {
-            await UniTask.Yield();
-            
             foreach (var crystal in crystals)
             {
                 score.AddScore(1);
