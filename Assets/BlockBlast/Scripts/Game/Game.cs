@@ -1,13 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlockBlast.Scripts.Common.Extensions;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -19,7 +14,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameOverPresenter  gameOver;
-        [SerializeField] private ExplosionBlockPool explosionBlockPool;
+        [SerializeField] private LineExplosionAnimationPool lineExplosionAnimationPool;
         [SerializeField] private Score score;
 
         private bool _isCanSetShape;
@@ -52,7 +47,7 @@ namespace BlockBlast.Scripts.Game
                 panelDragShapes.RemoveShape(_dragShape);
                 CheckFullLines();
                 
-                if (!IsFindPalaceToShape())
+                if (!IsFindFreeSpaceForShape())
                 {
                     ShowGameOver();
                     return;
@@ -72,20 +67,9 @@ namespace BlockBlast.Scripts.Game
             Debug.Log("ShowGameOver");
         }
         
-        private bool IsFindPalaceToShape()
+        private bool IsFindFreeSpaceForShape()
         {
-            bool isCanSetShape = false;
-            
-            foreach (var shape in panelDragShapes.Shapes)
-            {
-                if (gameBoard.CheckIsCanSetShape(shape))
-                {
-                    isCanSetShape = true;
-                    break;
-                }
-            }
-
-            return isCanSetShape;
+            return panelDragShapes.Shapes.Any(shape => gameBoard.FindFreeSpaceOnBoard(shape) != null);
         }
 
         private void CheckFullLines()
@@ -163,7 +147,7 @@ namespace BlockBlast.Scripts.Game
                 }
             }
 
-            var explosion = explosionBlockPool.Get();
+            var explosion = lineExplosionAnimationPool.Get();
             explosion.transform.position = firstPosition;
             explosion.SetColor(_dragShape.CrystalColor);
             if (isVertical)
@@ -177,7 +161,7 @@ namespace BlockBlast.Scripts.Game
 
             explosion.OnComplete = () =>
             {
-                explosionBlockPool.Release(explosion); 
+                lineExplosionAnimationPool.Release(explosion); 
             };
         }
 

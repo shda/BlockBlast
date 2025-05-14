@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 5950763669998590238, guid: e763aa1ac65dd39478a060ae513d726a, type: 3}
-  initialPoolSize: 3
+  initialPoolSize: 5
 --- !u!4 &374558811
 Transform:
   m_ObjectHideFlags: 0
@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff35896a99854a44916a6a5c3be2f791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 519420031}
+  mainCamera: {fileID: 519420031}
   offsetScroll: {x: 0, y: 0}
 --- !u!1 &393948905
 GameObject:
@@ -907,7 +907,7 @@ MonoBehaviour:
   boardGridSettings: {fileID: 1435043827}
   crystalPool: {fileID: 374558812}
   gameOver: {fileID: 410530211}
-  explosionBlockPool: {fileID: 374558810}
+  lineExplosionAnimationPool: {fileID: 374558810}
   score: {fileID: 393948907}
 --- !u!1 &590631876
 GameObject:

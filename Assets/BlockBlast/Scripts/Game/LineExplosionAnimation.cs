@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class ExplosionBlock : MonoBehaviour
+    public class LineExplosionAnimation : MonoBehaviour
     {
         [SerializeField] private CompleteAnimation verticalAnimation;
         [SerializeField] private CompleteAnimation horizontalAnimation;
@@ -21,8 +21,7 @@ namespace BlockBlast.Scripts.Game
             verticalAnimation.OnCompleteAnimation = OnCompleteAnimation;
             horizontalAnimation.OnCompleteAnimation = OnCompleteAnimation;
         }
-
-
+        
         public void PlayVerticalAnimation()
         {
             horizontalAnimation.gameObject.SetActive(false);

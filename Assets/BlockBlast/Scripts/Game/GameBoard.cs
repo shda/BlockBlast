@@ -11,7 +11,7 @@ namespace BlockBlast.Scripts.Game
         
         public Crystal[,] Crystals { get; private set; }
         
-        private List<Crystal> tempCrystals = new();
+        private readonly List<Crystal> _tempCrystals = new();
         private bool _isCanSetShape;
 
         private void Awake()
@@ -21,17 +21,17 @@ namespace BlockBlast.Scripts.Game
 
         public void RemoveTempShape()
         {
-            foreach (var tempCrystal in tempCrystals)
+            foreach (var tempCrystal in _tempCrystals)
             {
                 crystalPool.Release(tempCrystal);
             }
 
-            tempCrystals.Clear();
+            _tempCrystals.Clear();
         }
 
         public void SetShapeFromTemp()
         {
-            foreach (var tempCrystal in tempCrystals)
+            foreach (var tempCrystal in _tempCrystals)
             {
                 var coord = tempCrystal.Coordinates;
                 var crystal = SetCristal(new Vector2Int(coord.x, coord.y), tempCrystal.transform.position);
@@ -83,14 +83,14 @@ namespace BlockBlast.Scripts.Game
 
                     var newCristal = SetCristal(new Vector2Int(positionInGrid.x, positionInGrid.y) , position);
                     newCristal.SetSprite(shape.CrystalColor);
-                    tempCrystals.Add(newCristal);
+                    _tempCrystals.Add(newCristal);
                 }
             }
 
             return true;
         }
 
-        public bool CheckIsCanSetShape(Shape shape)
+        public Vector2? FindFreeSpaceOnBoard(Shape shape)
         {
             for (int x = 0; x < boardGridSettings.GridSize.x; x++)
             {
@@ -100,17 +100,17 @@ namespace BlockBlast.Scripts.Game
                     if(crystal)
                         continue;
 
-                    if (CheckIsCanSetShape(x , y , shape))
+                    if (CheckCanInsertShape(x , y , shape))
                     {
-                        return true;
+                        return new Vector2(x , y);
                     }
                 }
             }
 
-            return false;
+            return null;
         }
 
-        public bool CheckIsCanSetShape(int startX , int startY , Shape shape)
+        private bool CheckCanInsertShape(int startX , int startY , Shape shape)
         {
             for (int x = 0; x < shape.Size.x; x++)
             {
