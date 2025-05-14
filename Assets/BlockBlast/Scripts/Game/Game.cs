@@ -14,6 +14,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameOverPresenter  gameOver;
+        [SerializeField] private ExplosionBlockPool explosionBlockPool;
         [SerializeField] private Score score;
 
         private bool _isCanSetShape;
@@ -119,6 +120,8 @@ namespace BlockBlast.Scripts.Game
 
         private void RemovingCrystalsLine(List<Crystal> crystals)
         {
+            PlayExplosionLine(crystals);
+            
             foreach (var crystal in crystals)
             {
                 score.AddScore(1);
@@ -130,6 +133,29 @@ namespace BlockBlast.Scripts.Game
                 };
                 gameBoard.ClearPoint(crystal.Coordinates);
             }
+        }
+
+        private void PlayExplosionLine(List<Crystal> crystals)
+        {
+            var isVertical = crystals[0].transform.position.y > crystals[1].transform.position.y;
+            var firstPosition = crystals[0].transform.position;
+
+            var explosion = explosionBlockPool.Get();
+            explosion.transform.position = firstPosition;
+            explosion.SetColor(_dragShape.CrystalColor);
+            if (isVertical)
+            {
+                explosion.PlayVerticalAnimation();
+            }
+            else
+            {
+                explosion.PlayHorizontalAnimation();
+            }
+
+            explosion.OnComplete = () =>
+            {
+                explosionBlockPool.Release(explosion); 
+            };
         }
 
         private void OnDragShape(Shape shape, Vector3 pointShape)
