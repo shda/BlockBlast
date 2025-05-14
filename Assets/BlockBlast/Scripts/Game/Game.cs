@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -12,12 +12,14 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
+        [SerializeField] private GameOverPresenter  gameOver;
 
         private bool _isCanSetShape;
         private Shape _dragShape;
 
         private void Awake()
         {
+            gameOver.Hide();
             ConnectEvents();
         }
 
@@ -35,13 +37,44 @@ namespace BlockBlast.Scripts.Game
                 gameBoard.RemoveTempShape();
 
                 selectShapesPanel.RemoveShape(_dragShape);
-
                 CheckFullLines();
+                
+                if (!IsFindPalaceToShape())
+                {
+                    ShowGameOver();
+                    return;
+                }
             }
             else
             {
                 dragShapeHandler.ReturnShapeToDefault();
             }
+        }
+
+        private void ShowGameOver()
+        {
+            gameOver.Show();
+            gameOver.OnRestartGame = () =>
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            };
+            Debug.Log("ShowGameOver");
+        }
+        
+        private bool IsFindPalaceToShape()
+        {
+            bool isCanSetShape = false;
+            
+            foreach (var shape in selectShapesPanel.Shapes)
+            {
+                if (gameBoard.CheckIsCanSetShape(shape))
+                {
+                    isCanSetShape = true;
+                    break;
+                }
+            }
+
+            return isCanSetShape;
         }
 
         private void CheckFullLines()

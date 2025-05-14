@@ -14,26 +14,26 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private int maxCountShapes = 3;
         [SerializeField] private Transform[] shapePoint;
         
-        private readonly List<Shape> _shapes = new();
+        public List<Shape> Shapes { get; set; } = new();
 
         private void AddShape(Shape shape)
         {
-            if(_shapes.Count >= maxCountShapes)
+            if(Shapes.Count >= maxCountShapes)
                return;
             
-            _shapes.Add(shape);
-            shape.transform.position = shapePoint[_shapes.Count - 1].position;
+            Shapes.Add(shape);
+            shape.transform.position = shapePoint[Shapes.Count - 1].position;
             shape.transform.localScale = new Vector3(scaleToPanel , scaleToPanel , 1);
         }
 
         public void RemoveShape(Shape shape)
         {
-            _shapes.Remove(shape);
+            Shapes.Remove(shape);
             shape.ReleaseCrystals(crystalPool);
             
             Destroy(shape.gameObject);
 
-            if (_shapes.EmptyOnNull())
+            if (Shapes.EmptyOnNull())
             {
                 CreateNewShapes();
             }

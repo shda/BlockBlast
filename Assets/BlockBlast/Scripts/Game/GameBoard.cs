@@ -8,7 +8,6 @@ namespace BlockBlast.Scripts.Game
     {
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameBoardGridSettings boardGridSettings;
-        [SerializeField] private Vector2Int gridSize;
         
         public Crystal[,] Crystals { get; private set; }
         
@@ -67,7 +66,6 @@ namespace BlockBlast.Scripts.Game
                         startPosY + y);
 
                     var position = startGrid + startPosition + new Vector3(x * gridStep.x, y * gridStep.y, 0);
-                    Debug.DrawLine(position, Vector3.zero, Color.red);
 
                     var outOfBounds =
                         position.x < startGrid.x ||
@@ -87,6 +85,56 @@ namespace BlockBlast.Scripts.Game
 
             return true;
         }
+
+        public bool CheckIsCanSetShape(Shape shape)
+        {
+            for (int x = 0; x < boardGridSettings.GridSize.x; x++)
+            {
+                for (int y = 0; y < boardGridSettings.GridSize.y; y++)
+                {
+                    var crystal = Crystals[x, y];
+                    if(crystal)
+                        continue;
+
+                    if (CheckIsCanSetShape(x , y , shape))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool CheckIsCanSetShape(int startX , int startY , Shape shape)
+        {
+            for (int x = 0; x < shape.Size.x; x++)
+            {
+                for (int y = 0; y < shape.Size.y; y++)
+                {
+                    var val = shape.Grid[x, y];
+                    if(val <= 0)
+                        continue;
+                            
+                    var checkPointX = startX + x;
+                    var checkPointY = startY + y;
+
+                    if (checkPointX >= boardGridSettings.GridSize.x || 
+                        checkPointY >= boardGridSettings.GridSize.y)
+                    {
+                        return false;
+                    }
+                    
+                    var crystal = Crystals[checkPointX, checkPointY];
+                    if (crystal)
+                        return false;
+
+                }
+            }
+
+            return true;
+        }
+        
 
         private Crystal SetCristal(Vector2Int point, Vector3 position)
         {
