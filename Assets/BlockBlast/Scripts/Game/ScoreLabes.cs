@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class Score : MonoBehaviour
+    public class ScoreLabes : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI bestScoreText;

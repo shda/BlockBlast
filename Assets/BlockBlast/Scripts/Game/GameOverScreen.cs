@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class GameOverPresenter : MonoBehaviour
+    public class GameOverScreen : MonoBehaviour
     {
         public Action OnRestartGame;
         

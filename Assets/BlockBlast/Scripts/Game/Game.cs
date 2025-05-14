@@ -3,6 +3,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -13,16 +14,16 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
-        [SerializeField] private GameOverPresenter  gameOver;
+        [SerializeField] private GameOverScreen  gameOverScreen;
         [SerializeField] private LineExplosionAnimationPool lineExplosionAnimationPool;
-        [SerializeField] private Score score;
+        [SerializeField] private ScoreLabes scoreLabes;
 
         private bool _isCanSetShape;
         private Shape _dragShape;
         
         private void Awake()
         {
-            gameOver.Hide();
+            gameOverScreen.Hide();
             ConnectEvents();
         }
 
@@ -31,7 +32,7 @@ namespace BlockBlast.Scripts.Game
             dragShapeHandler.OnDragShape = OnDragShape;
             dragShapeHandler.OnCompleteDragShape = OnCompleteDragShape;
             
-            gameOver.OnRestartGame = () =>
+            gameOverScreen.OnRestartGame = () =>
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             };
@@ -61,8 +62,8 @@ namespace BlockBlast.Scripts.Game
 
         private void ShowGameOver()
         {
-            score.UpdateBestScore();
-            gameOver.Show();
+            scoreLabes.UpdateBestScore();
+            gameOverScreen.Show();
             
             Debug.Log("ShowGameOver");
         }
@@ -122,7 +123,7 @@ namespace BlockBlast.Scripts.Game
         {
             foreach (var crystal in crystals)
             {
-                score.AddScore(1);
+                scoreLabes.AddScore(1);
                 
                 crystal.transform.DOScale(Vector3.zero, 0.3f).onComplete = () =>
                 {
