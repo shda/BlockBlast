@@ -857,6 +857,7 @@ MonoBehaviour:
   boardGridSettings: {fileID: 1435043827}
   crystalPool: {fileID: 550083490}
   gameOver: {fileID: 410530211}
+  explosionBlockPool: {fileID: 1061414080}
   score: {fileID: 393948907}
 --- !u!114 &550083490
 MonoBehaviour:
@@ -2463,10 +2464,6 @@ PrefabInstance:
     - target: {fileID: 1226437054988547207, guid: e763aa1ac65dd39478a060ae513d726a, type: 3}
       propertyPath: m_Name
       value: Explosion
-      objectReference: {fileID: 0}
-    - target: {fileID: 1226437054988547207, guid: e763aa1ac65dd39478a060ae513d726a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3183290733487983202, guid: e763aa1ac65dd39478a060ae513d726a, type: 3}
       propertyPath: m_LocalPosition.x
