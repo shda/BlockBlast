@@ -13,7 +13,8 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private float scaleToPanel = 0.3f;
         [SerializeField] private int maxCountShapes = 3;
         [SerializeField] private Transform[] shapePoint;
-        
+
+        private int tour = 0;
         public List<Shape> Shapes { get; set; } = new();
 
         private void AddShape(Shape shape)
@@ -41,9 +42,12 @@ namespace BlockBlast.Scripts.Game
 
         public void CreateNewShapes()
         {
-            for (int i = 0; i < maxCountShapes; i++)
+            tour++;
+            var prefabShapes = shapeCollection.GetPrefabShapes(tour);
+
+            foreach (var prefab in prefabShapes)
             {
-                var newShape = shapeCollection.CreateRandomShape();
+                var newShape = Instantiate(prefab);
                 newShape.CreateCrystals(crystalPool , boardGridSettings , Random.Range(0, 5));
                 AddShape(newShape);
             }

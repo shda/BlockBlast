@@ -61,5 +61,10 @@ namespace BlockBlast.Scripts.Game
             
             _crystals.Clear();
         }
+
+        public void SetMatrix(int[,] matrix)
+        {
+            grid.SetMatrix(matrix);
+        }
     }
 }

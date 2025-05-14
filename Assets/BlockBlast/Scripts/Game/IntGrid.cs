@@ -49,5 +49,21 @@ namespace BlockBlast.Scripts.Game
                     row.row.RemoveAt(row.row.Count - 1);
             }
         }
+
+        public void SetMatrix(int[,] matrix)
+        {
+            width = matrix.GetLength(0);
+            height = matrix.GetLength(1);
+
+            ResizeGrid();
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    this[x, y] = matrix[x, y];
+                }
+            }
+        }
     }
 }
