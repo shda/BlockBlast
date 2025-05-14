@@ -7,13 +7,14 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
     public class Game : MonoBehaviour
     {
         [SerializeField] private GameBoard gameBoard;
-        [SerializeField] private SelectShapesPanel selectShapesPanel;
+        [SerializeField] private PanelDragShapes panelDragShapes;
         [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
@@ -48,7 +49,7 @@ namespace BlockBlast.Scripts.Game
                 gameBoard.SetShapeFromTemp();
                 gameBoard.RemoveTempShape();
 
-                selectShapesPanel.RemoveShape(_dragShape);
+                panelDragShapes.RemoveShape(_dragShape);
                 CheckFullLines();
                 
                 if (!IsFindPalaceToShape())
@@ -75,7 +76,7 @@ namespace BlockBlast.Scripts.Game
         {
             bool isCanSetShape = false;
             
-            foreach (var shape in selectShapesPanel.Shapes)
+            foreach (var shape in panelDragShapes.Shapes)
             {
                 if (gameBoard.CheckIsCanSetShape(shape))
                 {
@@ -188,7 +189,7 @@ namespace BlockBlast.Scripts.Game
 
         private void Start()
         {
-            selectShapesPanel.CreateNewShapes();
+            panelDragShapes.CreateNewShapes();
         }
         
         public void DebugInitLevel(IntGrid grid)
@@ -198,7 +199,7 @@ namespace BlockBlast.Scripts.Game
 
         public void DebugInitShapes(Shape[] setShapes)
         {
-            selectShapesPanel.DebugInitShapes(setShapes);
+            panelDragShapes.DebugInitShapes(setShapes);
         }
     }
 }

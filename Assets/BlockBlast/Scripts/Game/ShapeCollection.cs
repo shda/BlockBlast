@@ -6,7 +6,8 @@ using UnityEngine.Pool;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class ShapeCollection : MonoBehaviour
+    [CreateAssetMenu(menuName = "BlockBlast/Create " + nameof(ShapeCollection), fileName = nameof(ShapeCollection), order = 0)]
+    public class ShapeCollection : ScriptableObject
     {
         [SerializeField] private Shape[] sampleBlocks;
         [SerializeField] private Shape[] hardBlocks;

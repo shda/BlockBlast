@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class SelectShapesPanel : MonoBehaviour
+    public class PanelDragShapes : MonoBehaviour
     {
         [SerializeField] private ShapeCollection shapeCollection;
         [SerializeField] private CrystalPool crystalPool;
