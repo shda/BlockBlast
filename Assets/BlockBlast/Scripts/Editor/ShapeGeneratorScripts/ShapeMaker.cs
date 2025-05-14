@@ -42,7 +42,7 @@ namespace BlockBlast.Scripts.Editor.ShapeGeneratorScripts
                     int rows = lines.Length;
                     int cols = lines[0].Length;
 
-                    int[,] matrix = new int[rows, cols];
+                    int[,] matrix = new int[cols , rows];
 
                     for (int row = 0; row < rows; row++)
                     {
@@ -50,9 +50,9 @@ namespace BlockBlast.Scripts.Editor.ShapeGeneratorScripts
                         {
                             char c = lines[row][col];
                             if (c == 'x')
-                                matrix[row, col] = 1;
+                                matrix[cols - col - 1 ,row] = 1;
                             else if (c == 'o')
-                                matrix[row, col] = 0;
+                                matrix[cols - col - 1 ,row] = 0;
                             else
                                 throw new FormatException($"Неизвестный символ '{c}' на [{row},{col}]");
                         }

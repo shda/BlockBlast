@@ -44,7 +44,7 @@ namespace BlockBlast.Scripts.Editor
 
             int size = 40;
 
-            for (int y = 0; y < grid.Count; y++)
+            for (int y = grid.Count - 1; y >= 0; y--)
             {
                 GUILayout.BeginHorizontal();
                 for (int x = 0; x < grid[y].row.Count; x++)

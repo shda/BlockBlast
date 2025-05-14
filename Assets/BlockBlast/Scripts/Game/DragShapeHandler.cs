@@ -8,6 +8,7 @@ namespace BlockBlast.Scripts.Game
     {
         [SerializeField] private Camera camera;
         [SerializeField] private Vector2 offsetScroll = new(5f, 0f);
+        
         public Action<Shape, Vector3> OnDragShape;
         public Action OnCompleteDragShape;
         
@@ -17,24 +18,33 @@ namespace BlockBlast.Scripts.Game
         
         private Vector3 _startShapePosition;
         private Vector3 _startShapeScale;
+
+        private bool _lockAction = false;
         
         private void Update()
         {
+            if(_lockAction)
+                return;
+            
             if (Input.GetMouseButtonDown(0))
             {
-                _dragStatus = DragStatus.Drag;
-                
                 Vector2 mouseWorldPos = camera.ScreenToWorldPoint(Input.mousePosition);
                 var hitCollider = Physics2D.OverlapPoint(mouseWorldPos);
 
                 if (hitCollider && hitCollider is BoxCollider2D dragBoxCollider)
                 {
+                    _dragStatus = DragStatus.Drag;
+                    
                     _selectedShape = dragBoxCollider.GetComponent<Shape>();
                     _offset = dragBoxCollider.transform.position - new Vector3(mouseWorldPos.x , mouseWorldPos.y, 0);
                     _offset -= offsetScroll;
 
                     _startShapePosition = _selectedShape.transform.position;
                     _startShapeScale = _selectedShape.transform.localScale;
+                }
+                else
+                {
+                    _selectedShape = null;
                 }
             }
 
@@ -61,10 +71,15 @@ namespace BlockBlast.Scripts.Game
 
         public void ReturnShapeToDefault()
         {
-            if (_selectedShape != null)
+            if (_selectedShape)
             {
+                _lockAction = true;
+                
                 _selectedShape.transform.DOMove(_startShapePosition, 0.3f);
-                _selectedShape.transform.DOScale(_startShapeScale, 0.3f);
+                _selectedShape.transform.DOScale(_startShapeScale, 0.3f).onComplete = () =>
+                {
+                    _lockAction = false;
+                };
             }
         }
     }

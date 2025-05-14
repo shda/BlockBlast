@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8756537736396728282
+--- !u!1001 &3413983437239503855
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -54,46 +54,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
       propertyPath: width
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: height
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
       propertyPath: grid.Array.data[0].row.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
       propertyPath: grid.Array.data[1].row.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.data[2].row.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.data[3].row.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
       propertyPath: 'grid.Array.data[0].row.Array.data[0]'
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
+      propertyPath: 'grid.Array.data[0].row.Array.data[3]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
+      propertyPath: 'grid.Array.data[1].row.Array.data[0]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
       propertyPath: 'grid.Array.data[1].row.Array.data[1]'
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: 'grid.Array.data[2].row.Array.data[0]'
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: 'grid.Array.data[3].row.Array.data[0]'
+      propertyPath: 'grid.Array.data[1].row.Array.data[3]'
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

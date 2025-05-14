@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using BlockBlast.Scripts.Common.Extensions;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 
 namespace BlockBlast.Scripts.Game
@@ -19,7 +23,7 @@ namespace BlockBlast.Scripts.Game
 
         private bool _isCanSetShape;
         private Shape _dragShape;
-
+        
         private void Awake()
         {
             gameOver.Hide();
@@ -86,9 +90,15 @@ namespace BlockBlast.Scripts.Game
         private void CheckFullLines()
         {
             var size = boardGridSettings.GridSize;
-
+            
+            var crystalsHide = new HashSet<Crystal>();
+            
             CheckLines(true); // Проверка строк
             CheckLines(false); // Проверка столбцов
+
+            RemovingCrystalsLine(crystalsHide);
+            
+            
             void CheckLines(bool isRow)
             {
                 for (var i = 0; i < (isRow ? size.x : size.y); i++)
@@ -96,10 +106,10 @@ namespace BlockBlast.Scripts.Game
                     var crystals = new List<Crystal>();
                     for (var j = 0; j < (isRow ? size.y : size.x); j++)
                     {
-                        int x = isRow ? i : j;
-                        int y = isRow ? j : i;
+                        var x = isRow ? i : j;
+                        var y = isRow ? j : i;
                         var point = gameBoard.Crystals[x, y];
-                        if (point != null)
+                        if (point)
                         {
                             crystals.Add(gameBoard.Crystals[x, y]);
                         }
@@ -112,15 +122,20 @@ namespace BlockBlast.Scripts.Game
 
                     if (crystals.Count > 0)
                     {
-                        RemovingCrystalsLine(crystals);
+                        foreach (var crystal in crystals)
+                        {
+                            crystalsHide.Add(crystal);
+                        }
+                        
+                        PlayExplosionLine(crystals);
                     }
                 }
             }
         }
 
-        private void RemovingCrystalsLine(List<Crystal> crystals)
+        private async void RemovingCrystalsLine(IEnumerable<Crystal> crystals)
         {
-            PlayExplosionLine(crystals);
+            await UniTask.Yield();
             
             foreach (var crystal in crystals)
             {
@@ -137,8 +152,17 @@ namespace BlockBlast.Scripts.Game
 
         private void PlayExplosionLine(List<Crystal> crystals)
         {
-            var isVertical = crystals[0].transform.position.y > crystals[1].transform.position.y;
+            var isVertical = !Mathf.Approximately(crystals[0].transform.position.y, crystals[1].transform.position.y);
             var firstPosition = crystals[0].transform.position;
+
+            foreach (var crystal in crystals)
+            {
+                if (crystal.transform.position.x < firstPosition.x || 
+                    crystal.transform.position.y < firstPosition.y)
+                {
+                    firstPosition = crystal.transform.position;
+                }
+            }
 
             var explosion = explosionBlockPool.Get();
             explosion.transform.position = firstPosition;
@@ -167,6 +191,16 @@ namespace BlockBlast.Scripts.Game
         private void Start()
         {
             selectShapesPanel.CreateNewShapes();
+        }
+        
+        public void DebugInitLevel(IntGrid grid)
+        {
+            gameBoard.DebugInitLevel(grid);
+        }
+
+        public void DebugInitShapes(Shape[] setShapes)
+        {
+            selectShapesPanel.DebugInitShapes(setShapes);
         }
     }
 }

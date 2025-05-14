@@ -152,5 +152,23 @@ namespace BlockBlast.Scripts.Game
         {
             Crystals[coordinates.x, coordinates.y] = null;
         }
+        
+        
+        public void DebugInitLevel(IntGrid grid)
+        {
+            for (var x = 0; x < grid.width; x++)
+            {
+                for (var y = 0; y < grid.height; y++)
+                {
+                    if (grid[x, y] > 0)
+                    {
+                        var startGrid = boardGridSettings.transform.position;
+                        var point = startGrid + (Vector3) (boardGridSettings.GridStep * new Vector2Int(x, y));
+                        var crystal = SetCristal(new Vector2Int(x, y) , point);
+                        Crystals[x, y] = crystal;
+                    }
+                }
+            }
+        }
     }
 }

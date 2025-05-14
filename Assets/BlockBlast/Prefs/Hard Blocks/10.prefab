@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6158859225580176606
+--- !u!1001 &6278940216553585607
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -51,42 +51,6 @@ PrefabInstance:
     - target: {fileID: 3978324733457427153, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
       propertyPath: m_Name
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: width
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: height
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.data[0].row.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.data[1].row.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: grid.Array.data[2].row.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: 'grid.Array.data[0].row.Array.data[0]'
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: 'grid.Array.data[0].row.Array.data[1]'
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956403126488654904, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
-      propertyPath: 'grid.Array.data[2].row.Array.data[1]'
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

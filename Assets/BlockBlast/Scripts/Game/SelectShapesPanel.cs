@@ -14,19 +14,22 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private int maxCountShapes = 3;
         [SerializeField] private Transform[] shapePoint;
 
-        private int tour = 0;
+        private int _tour = 0;
         public List<Shape> Shapes { get; set; } = new();
-
-        private void AddShape(Shape shape)
+        
+        public void CreateNewShapes()
         {
-            if(Shapes.Count >= maxCountShapes)
-               return;
-            
-            Shapes.Add(shape);
-            shape.transform.position = shapePoint[Shapes.Count - 1].position;
-            shape.transform.localScale = new Vector3(scaleToPanel , scaleToPanel , 1);
-        }
+            _tour++;
+            var prefabShapes = shapeCollection.GetPrefabShapes(_tour);
 
+            foreach (var prefab in prefabShapes)
+            {
+                var newShape = Instantiate(prefab);
+                newShape.CreateCrystals(crystalPool , boardGridSettings , Random.Range(0, 5));
+                AddShape(newShape);
+            }
+        }
+        
         public void RemoveShape(Shape shape)
         {
             Shapes.Remove(shape);
@@ -39,17 +42,33 @@ namespace BlockBlast.Scripts.Game
                 CreateNewShapes();
             }
         }
-
-        public void CreateNewShapes()
+        
+        private void AddShape(Shape shape)
         {
-            tour++;
-            var prefabShapes = shapeCollection.GetPrefabShapes(tour);
+            if(Shapes.Count >= maxCountShapes)
+                return;
+            
+            Shapes.Add(shape);
+            shape.transform.position = shapePoint[Shapes.Count - 1].position; // - (shape.ColliderSize * (0.2f));
+            shape.transform.localScale = new Vector3(scaleToPanel , scaleToPanel , 1);
+        }
 
-            foreach (var prefab in prefabShapes)
+        //Debug
+        public void DebugInitShapes(Shape[] setShapes)
+        {
+            foreach (var shape in Shapes)
             {
-                var newShape = Instantiate(prefab);
-                newShape.CreateCrystals(crystalPool , boardGridSettings , Random.Range(0, 5));
-                AddShape(newShape);
+                shape.ReleaseCrystals(crystalPool);
+                Destroy(shape.gameObject);
+            }
+            
+            Shapes.Clear();
+
+            foreach (var shape in setShapes)
+            {
+                var newShape = Instantiate(shape);
+                newShape.CreateCrystals(crystalPool , boardGridSettings);
+                AddShape(Instantiate(shape));
             }
         }
     }

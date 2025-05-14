@@ -12,6 +12,8 @@ namespace BlockBlast.Scripts.Game
         public IntGrid Grid => grid;
         public Vector2 Size => collider2d.size;
         
+        public Vector3 ColliderSize => collider2d.size;
+        
         public int CrystalColor { get; private set; }
 
         public void CreateCrystals(
