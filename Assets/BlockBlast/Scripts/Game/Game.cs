@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameOverPresenter  gameOver;
+        [SerializeField] private Score score;
 
         private bool _isCanSetShape;
         private Shape _dragShape;
@@ -27,6 +29,11 @@ namespace BlockBlast.Scripts.Game
         {
             dragShapeHandler.OnDragShape = OnDragShape;
             dragShapeHandler.OnCompleteDragShape = OnCompleteDragShape;
+            
+            gameOver.OnRestartGame = () =>
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            };
         }
 
         private void OnCompleteDragShape()
@@ -53,11 +60,9 @@ namespace BlockBlast.Scripts.Game
 
         private void ShowGameOver()
         {
+            score.UpdateBestScore();
             gameOver.Show();
-            gameOver.OnRestartGame = () =>
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            };
+            
             Debug.Log("ShowGameOver");
         }
         
@@ -116,6 +121,8 @@ namespace BlockBlast.Scripts.Game
         {
             foreach (var crystal in crystals)
             {
+                score.AddScore(1);
+                
                 crystal.transform.DOScale(Vector3.zero, 0.3f).onComplete = () =>
                 {
                     crystal.transform.localScale = Vector3.one;

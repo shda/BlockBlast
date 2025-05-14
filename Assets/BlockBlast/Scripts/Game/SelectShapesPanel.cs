@@ -44,7 +44,7 @@ namespace BlockBlast.Scripts.Game
             for (int i = 0; i < maxCountShapes; i++)
             {
                 var newShape = shapeCollection.CreateRandomShape();
-                newShape.CreateCrystals(crystalPool , boardGridSettings);
+                newShape.CreateCrystals(crystalPool , boardGridSettings , Random.Range(0, 5));
                 AddShape(newShape);
             }
         }

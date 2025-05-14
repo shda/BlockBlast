@@ -11,12 +11,16 @@ namespace BlockBlast.Scripts.Game
         private readonly List<Crystal> _crystals = new ();
         public IntGrid Grid => grid;
         public Vector2 Size => collider2d.size;
+        
+        public int CrystalColor { get; private set; }
 
         public void CreateCrystals(
             CrystalPool crystalPool,
-            GameBoardGridSettings boardGridSettings)
+            GameBoardGridSettings boardGridSettings , int indexColor = 0)
         {
             var step = boardGridSettings.GridStep;
+
+            CrystalColor = indexColor;
             
             for (int y = 0; y < grid.height; y++)
                 for (int x = 0; x < grid.width; x++)
@@ -25,6 +29,7 @@ namespace BlockBlast.Scripts.Game
                     if (point > 0)
                     {
                         var newCristal = crystalPool.Get();
+                        newCristal.SetSprite(indexColor);
                         newCristal.transform.parent = transform;
                         newCristal.transform.localPosition = new Vector3(step.x * x , step.y * y , 0);
                         newCristal.transform.localScale = Vector3.one;

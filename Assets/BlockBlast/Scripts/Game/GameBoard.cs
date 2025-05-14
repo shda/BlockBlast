@@ -34,7 +34,9 @@ namespace BlockBlast.Scripts.Game
             foreach (var tempCrystal in tempCrystals)
             {
                 var coord = tempCrystal.Coordinates;
-                Crystals[coord.x, coord.y] = SetCristal(new Vector2Int(coord.x, coord.y), tempCrystal.transform.position);
+                var crystal = SetCristal(new Vector2Int(coord.x, coord.y), tempCrystal.transform.position);
+                crystal.SetSprite(tempCrystal.GetSpriteIndex());
+                Crystals[coord.x, coord.y] = crystal;
             }
 
             RemoveTempShape();
@@ -78,8 +80,10 @@ namespace BlockBlast.Scripts.Game
                         RemoveTempShape();
                         return false;
                     }
-                    
-                    tempCrystals.Add(SetCristal(new Vector2Int(positionInGrid.x, positionInGrid.y), position));
+
+                    var newCristal = SetCristal(new Vector2Int(positionInGrid.x, positionInGrid.y) , position);
+                    newCristal.SetSprite(shape.CrystalColor);
+                    tempCrystals.Add(newCristal);
                 }
             }
 
