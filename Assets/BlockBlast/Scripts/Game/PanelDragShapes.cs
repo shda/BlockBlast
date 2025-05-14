@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BlockBlast.Scripts.Common.Extensions;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -10,7 +11,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameBoardGridSettings  boardGridSettings;
         
-        [SerializeField] private float scaleToPanel = 0.3f;
+        [SerializeField] private float scaleOnPanel = 0.3f;
         [SerializeField] private int maxCountShapes = 3;
         [SerializeField] private Transform[] shapePoint;
 
@@ -50,7 +51,7 @@ namespace BlockBlast.Scripts.Game
             
             Shapes.Add(shape);
             shape.transform.position = shapePoint[Shapes.Count - 1].position; // - (shape.ColliderSize * (0.2f));
-            shape.transform.localScale = new Vector3(scaleToPanel , scaleToPanel , 1);
+            shape.transform.localScale = new Vector3(scaleOnPanel , scaleOnPanel , 1);
         }
 
         //Debug

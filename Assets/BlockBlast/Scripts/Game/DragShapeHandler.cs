@@ -6,64 +6,77 @@ namespace BlockBlast.Scripts.Game
 {
     public class DragShapeHandler : MonoBehaviour
     {
-        [SerializeField] private Camera camera;
+        [SerializeField] private Camera mainCamera;
         [SerializeField] private Vector2 offsetScroll = new(5f, 0f);
         
         public Action<Shape, Vector3> OnDragShape;
         public Action OnCompleteDragShape;
-        
-        private DragStatus _dragStatus = DragStatus.None;
-        private Shape _selectedShape;
-        private Vector2 _offset;
-        
-        private Vector3 _startShapePosition;
-        private Vector3 _startShapeScale;
 
-        private bool _lockAction = false;
+        private bool _isDrag;
+        private Shape _selectedShape;
+        private Vector2 _offsetStartDrag;
+        
+        private Vector3 _saveStartShapePosition;
+        private Vector3 _saveStartShapeScale;
+
+        private bool _isShapeMovingToStartPositon;
         
         private void Update()
         {
-            if(_lockAction)
+            if(_isShapeMovingToStartPositon)
                 return;
             
+            StartDragHandler();
+            DragHandler();
+            CompleteDragHandler();
+        }
+        
+        private void StartDragHandler()
+        {
             if (Input.GetMouseButtonDown(0))
             {
-                Vector2 mouseWorldPos = camera.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
                 var hitCollider = Physics2D.OverlapPoint(mouseWorldPos);
 
                 if (hitCollider && hitCollider is BoxCollider2D dragBoxCollider)
                 {
-                    _dragStatus = DragStatus.Drag;
+                    _isDrag = true;
                     
                     _selectedShape = dragBoxCollider.GetComponent<Shape>();
-                    _offset = dragBoxCollider.transform.position - new Vector3(mouseWorldPos.x , mouseWorldPos.y, 0);
-                    _offset -= offsetScroll;
+                    _offsetStartDrag = dragBoxCollider.transform.position - new Vector3(mouseWorldPos.x , mouseWorldPos.y, 0);
+                    _offsetStartDrag -= offsetScroll;
 
-                    _startShapePosition = _selectedShape.transform.position;
-                    _startShapeScale = _selectedShape.transform.localScale;
+                    _saveStartShapePosition = _selectedShape.transform.position;
+                    _saveStartShapeScale = _selectedShape.transform.localScale;
                 }
                 else
                 {
                     _selectedShape = null;
                 }
             }
-
+        }
+        
+        private void DragHandler()
+        {
             if (Input.GetMouseButton(0))
             {
-                if (_dragStatus == DragStatus.Drag && _selectedShape)
+                if (_isDrag && _selectedShape)
                 {
-                    Vector2 mouseWorldPos = camera.ScreenToWorldPoint(Input.mousePosition);
-                    _selectedShape.transform.position = mouseWorldPos + _offset;
+                    Vector2 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                    _selectedShape.transform.position = mouseWorldPos + _offsetStartDrag;
                     _selectedShape.transform.localScale = Vector3.one;
-                    OnDragShape?.Invoke(_selectedShape , mouseWorldPos + _offset);
+                    OnDragShape?.Invoke(_selectedShape , mouseWorldPos + _offsetStartDrag);
                 }
             }
-
+        }
+        
+        private void CompleteDragHandler()
+        {
             if (Input.GetMouseButtonUp(0))
             {
-                if (_dragStatus == DragStatus.Drag)
+                if (_isDrag)
                 {
-                    _dragStatus = DragStatus.None;
+                    _isDrag = false;
                     OnCompleteDragShape?.Invoke();
                 }
             }
@@ -73,12 +86,12 @@ namespace BlockBlast.Scripts.Game
         {
             if (_selectedShape)
             {
-                _lockAction = true;
+                _isShapeMovingToStartPositon = true;
                 
-                _selectedShape.transform.DOMove(_startShapePosition, 0.3f);
-                _selectedShape.transform.DOScale(_startShapeScale, 0.3f).onComplete = () =>
+                _selectedShape.transform.DOMove(_saveStartShapePosition, 0.3f);
+                _selectedShape.transform.DOScale(_saveStartShapeScale, 0.3f).onComplete = () =>
                 {
-                    _lockAction = false;
+                    _isShapeMovingToStartPositon = false;
                 };
             }
         }

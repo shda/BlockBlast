@@ -380,7 +380,7 @@ MonoBehaviour:
   shapeCollection: {fileID: 11400000, guid: 9f9d0822bf7a45d44af2d12f2f2ad0e4, type: 2}
   crystalPool: {fileID: 374558812}
   boardGridSettings: {fileID: 1435043827}
-  scaleToPanel: 0.5
+  scaleOnPanel: 0.6
   maxCountShapes: 3
   shapePoint:
   - {fileID: 2091863915}
