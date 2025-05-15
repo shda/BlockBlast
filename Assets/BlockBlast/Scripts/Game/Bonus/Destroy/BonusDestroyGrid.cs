@@ -1,17 +1,80 @@
+using System;
 using BlockBlast.Scripts.Game.Bonus.Rotate;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BlockBlast.Scripts.Game.Bonus.Destroy
 {
     public class BonusDestroyGrid : BonusBase
     {
+        [SerializeField] private Vector2Int destroySize = new Vector2Int(3, 3);
+
+        [SerializeField] private CrystalPool crystalPool;
+        [SerializeField] private GameBoard gameBoard;
+        [SerializeField] private GameBoardGridSettings boardGridSettings;
+        [SerializeField] private Camera cam;
+        [SerializeField] private PanelDragShapes panelDragShapes;
+        [SerializeField] private DragShapeHandler dragShapeHandler;
+
+        [SerializeField] private Transform dragRect;
+
+        private bool _isDrag;
+
         public override void StartBonus()
         {
-           
+            dragRect.gameObject.SetActive(true);
+            dragShapeHandler.IsDragDisable = true;
+            _isDrag = true;
         }
 
         public override void StopBonus()
         {
-            
+            dragRect.gameObject.SetActive(false);
+            dragShapeHandler.IsDragDisable = false;
+            _isDrag = false;
+        }
+
+        private void Update()
+        {
+            if (_isDrag)
+            {
+                var mouseWorldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+                var startGrid = boardGridSettings.transform.position;
+                var point = gameBoard.GetCoordNearestPointByWorldPoint(mouseWorldPos);
+
+                var position = startGrid + (Vector3)(point * boardGridSettings.GridStep);
+
+                dragRect.transform.position = position;
+
+                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    DestroyCrystalsByStartPoint(point - new Vector2Int(1, 1), destroySize);
+                    StopBonus();
+                    OnComplete?.Invoke();
+                }
+            }
+        }
+
+        private void DestroyCrystalsByStartPoint(Vector2Int startPos, Vector2Int size)
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    var coord = startPos + new Vector2Int(x, y);
+                    var crystal = gameBoard.GetCrystalToPoint(coord);
+                    if (crystal)
+                    {
+                        crystal.PlayAnimationHide(() =>
+                        {
+                            crystalPool.Release(crystal);
+                            crystal.transform.localScale = Vector3.one;
+                        });
+
+                        gameBoard.ClearPoint(crystal.Coordinates);
+                    }
+                }
+            }
         }
     }
 }

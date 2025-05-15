@@ -124,12 +124,13 @@ namespace BlockBlast.Scripts.Game
             foreach (var crystal in crystals)
             {
                 scoreLabes.AddScore(1);
-                
-                crystal.transform.DOScale(Vector3.zero, 0.3f).onComplete = () =>
+
+                crystal.PlayAnimationHide(() =>
                 {
                     crystal.transform.localScale = Vector3.one;
                     crystalPool.Release(crystal);
-                };
+                });
+                
                 gameBoard.ClearPoint(crystal.Coordinates);
             }
         }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using BlockBlast.Scripts.Common.Extensions;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -71,6 +70,21 @@ namespace BlockBlast.Scripts.Game
                 newShape.CreateCrystals(crystalPool , boardGridSettings);
                 AddShape(Instantiate(shape));
             }
+        }
+
+        public void ChangeShape(Shape shape)
+        { 
+            Shapes.Remove(shape);
+            shape.ReleaseCrystals(crystalPool);
+            
+            Destroy(shape.gameObject);
+            
+            var newShape = Instantiate(shapeCollection.GetRandomShape(shape));
+            newShape.CreateCrystals(crystalPool , boardGridSettings , Random.Range(0, 5));
+            Shapes.Add(newShape);
+            
+            newShape.transform.position = shape.transform.position;
+            newShape.transform.localScale = new Vector3(scaleOnPanel , scaleOnPanel , 1);
         }
     }
 }

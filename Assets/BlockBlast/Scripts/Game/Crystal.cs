@@ -1,3 +1,5 @@
+using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
@@ -20,6 +22,14 @@ namespace BlockBlast.Scripts.Game
         public int GetSpriteIndex()
         {
             return ColorIndex;
+        }
+
+        public void PlayAnimationHide(Action action)
+        {
+            transform.DOScale(Vector3.zero, 0.3f).onComplete = () =>
+            {
+                action?.Invoke();
+            };
         }
     }
 }

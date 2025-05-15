@@ -6,11 +6,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
 {
     public class ButtonsRotate : UIBehaviour
     {
-        [SerializeField] private Camera cam;
-        [SerializeField] private Canvas canvas;
-        [SerializeField] private RectTransform uiElement;
-        
-        private Transform _targetTransform;
+        [SerializeField] private RectTransformFallowToObject fallowToObject;
 
         public Action<ButtonsRotate> PressRotate;
         public Action<ButtonsRotate> PressApply;
@@ -27,24 +23,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
         
         public void SetFallowTransform(Transform tr)
         {
-            _targetTransform = tr;
-            Update();
-        }
-        
-        private void Update()
-        {
-            if(!_targetTransform)
-                return;
-            
-            var screenPoint = RectTransformUtility.WorldToScreenPoint(cam, _targetTransform.position);
-
-            Vector2 localPoint;
-            var canvasRect = canvas.GetComponent<RectTransform>();
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPoint, 
-                    canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : cam, out localPoint))
-            {
-                uiElement.localPosition = localPoint;
-            }
+            fallowToObject.SetFallowTransform(tr);
         }
     }
 }

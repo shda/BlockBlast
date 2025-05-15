@@ -58,6 +58,11 @@ namespace BlockBlast.Scripts.Game
             return tempList.GetRange(0, count);
         }
 
+        public Shape GetRandomShape(Shape shape)
+        {
+            return GetRandomUniqueShapes(sampleBlocks, 1).First();
+        }
+
         public void SetSimpleFromShapeMaker(List<Shape> createShapes)
         {
             sampleBlocks = createShapes.ToArray();

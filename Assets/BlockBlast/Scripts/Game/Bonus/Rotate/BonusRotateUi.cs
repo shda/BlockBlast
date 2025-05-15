@@ -9,13 +9,11 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
 {
     public class BonusRotateUi : MonoBehaviour
     {
-        [SerializeField] private PanelDragShapes panelDragShapes;
-        [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private PoolGameObjectsComponent<ButtonsRotate> poolButtons;
-
         private readonly List<ButtonsRotate> _buttonsRotates = new();
         
-        public Action OnComplete;
+        public Action<Shape> OnPressRotate;
+        public Action<Shape> OnPressApply;
 
         private void Awake()
         {
@@ -23,18 +21,15 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
         }
 
         [Button]
-        public void ShowBonusUi()
+        public void ShowBonusUi(IEnumerable<Shape> shapes)
         {
-            dragShapeHandler.IsDragDisable = true;
-            
             RemoveOldButtons();
-            foreach (var shape in panelDragShapes.Shapes)
+            foreach (var shape in shapes)
             {
                 var buttonsRotate = poolButtons.Get();
                 buttonsRotate.PressApply = rotate =>
                 {
-                    HideBonusUi();
-                    OnComplete?.Invoke();
+                   OnPressApply?.Invoke(shape);
                 };
                 buttonsRotate.PressRotate = rotate =>
                 {
@@ -45,7 +40,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
                         _buttonsRotates.Remove(button);
                     }
                     
-                    shape.RotateShapeCounterClockwise();
+                    OnPressRotate?.Invoke(shape);
                 };
                 
                 buttonsRotate.transform.parent = transform;
@@ -59,7 +54,6 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
         public void HideBonusUi()
         {
             RemoveOldButtons();
-            dragShapeHandler.IsDragDisable = false;
         }
 
         private void RemoveOldButtons()

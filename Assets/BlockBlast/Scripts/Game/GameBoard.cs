@@ -138,12 +138,25 @@ namespace BlockBlast.Scripts.Game
 
             return true;
         }
+
+        public Vector2Int GetCoordNearestPointByWorldPoint(Vector3 worldPoint)
+        {
+            var gridStep = boardGridSettings.GridStep;
+            var startGrid = boardGridSettings.transform.position;
+            var pointStartShape = worldPoint - startGrid;
+
+            var startPosX = Mathf.RoundToInt(pointStartShape.x / gridStep.x);
+            var startPosY = Mathf.RoundToInt(pointStartShape.y / gridStep.y);
+            
+            return new Vector2Int(startPosX , startPosY);
+        }
         
 
         private Crystal SetCristal(Vector2Int point, Vector3 position)
         {
             var newCrystal = crystalPool.Get();
             newCrystal.transform.position = position;
+            newCrystal.transform.localScale = Vector3.one;
             newCrystal.Coordinates = new Vector2Int(point.x, point.y);
             return newCrystal;
         }
@@ -152,7 +165,6 @@ namespace BlockBlast.Scripts.Game
         {
             Crystals[coordinates.x, coordinates.y] = null;
         }
-        
         
         public void DebugInitLevel(IntGrid grid)
         {
@@ -169,6 +181,18 @@ namespace BlockBlast.Scripts.Game
                     }
                 }
             }
+        }
+
+        public Crystal GetCrystalToPoint(Vector2Int point)
+        {
+            if (boardGridSettings.GridSize.x > point.x && 
+                boardGridSettings.GridSize.y > point.y && 
+                point is { x: >= 0, y: >= 0 })
+            {
+                return Crystals[point.x, point.y];
+            }
+
+            return null;
         }
     }
 }
