@@ -1,3 +1,4 @@
+using System;
 using TriInspector;
 using UnityEngine;
 
@@ -9,6 +10,17 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private Game game;
 
         [SerializeField] private Shape[] setShapes;
+
+        [SerializeField] private bool craeateByStart;
+
+
+        private void Start()
+        {
+            if (craeateByStart)
+            {
+                InitGame();
+            }
+        }
 
         [Button]
         public void InitGame()

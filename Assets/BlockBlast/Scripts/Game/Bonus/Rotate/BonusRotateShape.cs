@@ -27,13 +27,13 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
 
             bonusRotateUi.OnPressRotate = shape =>
             {
+                shape.RotateShapeCounterClockwise();
+                
                 if (!isChange)
                 {
                     isChange = true;
                     bonusCountData.CountRotateBonus.Value--;
                 }
-                
-                shape.RotateShapeCounterClockwise();
             };
         }
 

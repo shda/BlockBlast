@@ -68,7 +68,7 @@ namespace BlockBlast.Scripts.Game
             {
                 var newShape = Instantiate(shape);
                 newShape.CreateCrystals(crystalPool , boardGridSettings);
-                AddShape(Instantiate(shape));
+                AddShape(newShape);
             }
         }
 

@@ -1,7 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using BlockBlast.Scripts.Game.Bonus;
+using Cysharp.Threading.Tasks;
+using TriInspector;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,20 +13,46 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private GameBoard gameBoard;
         [SerializeField] private PanelDragShapes panelDragShapes;
         [SerializeField] private DragShapeHandler dragShapeHandler;
-        [SerializeField] private GameBoardGridSettings boardGridSettings;
         [SerializeField] private CrystalPool crystalPool;
-        [SerializeField] private GameOverScreen  gameOverScreen;
+        [SerializeField] private GameOverScreen  gameOverScreen; 
         [SerializeField] private LineExplosionAnimationPool lineExplosionAnimationPool;
         [SerializeField] private ScoreLabes scoreLabes;
-        [SerializeField] private BonusHandler bonusHandler;
-
+        [SerializeField] private BonusCountData bonusCountData;
+        [SerializeField] private FullLineHandler fullLineHandler;
+        
         private bool _isCanSetShape;
         private Shape _dragShape;
         
-        private void Awake()
+        private void Start()
         {
             gameOverScreen.Hide();
+            panelDragShapes.CreateNewShapes();
+            
             ConnectEvents();
+            ConnectBonusEvents();
+        }
+
+        private void ConnectBonusEvents()
+        {
+            bonusCountData.CountChangeShapeBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
+            bonusCountData.CountDestroyBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
+           bonusCountData.CountRotateBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
+        }
+
+        private void OnChangeCountBonuses(int count)
+        {
+            DelayedCheckGameOverAsync();
+        }
+
+        [Button]
+        private async void DelayedCheckGameOverAsync()
+        {
+            await UniTask.DelayFrame(2);
+            if (!IsFindFreeSpaceForShape() && 
+                !IsCanUsingBonus())
+            {
+                ShowGameOver();
+            }
         }
 
         private void ConnectEvents()
@@ -47,13 +74,9 @@ namespace BlockBlast.Scripts.Game
                 gameBoard.RemoveTempShape();
 
                 panelDragShapes.RemoveShape(_dragShape);
-                CheckFullLines();
+                fullLineHandler.CheckFullLines(_dragShape);
                 
-                if (!IsFindFreeSpaceForShape())
-                {
-                    ShowGameOver();
-                    return;
-                }
+                DelayedCheckGameOverAsync();
             }
             else
             {
@@ -74,114 +97,19 @@ namespace BlockBlast.Scripts.Game
             return panelDragShapes.Shapes.Any(shape => gameBoard.FindFreeSpaceOnBoard(shape) != null);
         }
 
-        private void CheckFullLines()
+        private bool IsCanUsingBonus()
         {
-            var size = boardGridSettings.GridSize;
-            
-            var crystalsHide = new HashSet<Crystal>();
-            
-            var lines = CheckLines(true); // Проверка строк
-            lines += CheckLines(false); // Проверка столбцов
-            bonusHandler.FullLineRemove(lines);
-            RemovingCrystalsLine(crystalsHide);
-            
-            
-            int  CheckLines(bool isRow)
-            { 
-                int countLines = 0;
-                for (var i = 0; i < (isRow ? size.x : size.y); i++)
-                {
-                    var crystals = new List<Crystal>();
-                    for (var j = 0; j < (isRow ? size.y : size.x); j++)
-                    {
-                        var x = isRow ? i : j;
-                        var y = isRow ? j : i;
-                        var point = gameBoard.Crystals[x, y];
-                        if (point)
-                        {
-                            crystals.Add(gameBoard.Crystals[x, y]);
-                        }
-                        else
-                        {
-                            crystals.Clear();
-                            break;
-                        }
-                    }
-
-                    if (crystals.Count > 0)
-                    {
-                        foreach (var crystal in crystals)
-                        {
-                            crystalsHide.Add(crystal);
-                        }
-
-                        countLines++;
-                        PlayExplosionLine(crystals);
-                    }
-                }
-
-                return countLines;
-            }
+            return bonusCountData.CountChangeShapeBonus.Value > 0 || 
+                   bonusCountData.CountDestroyBonus.Value > 0;
         }
-
-        private void RemovingCrystalsLine(IEnumerable<Crystal> crystals)
-        {
-            foreach (var crystal in crystals)
-            {
-                scoreLabes.AddScore(1);
-
-                crystal.PlayAnimationHide(() =>
-                {
-                    crystal.transform.localScale = Vector3.one;
-                    crystalPool.Release(crystal);
-                });
-                
-                gameBoard.ClearPoint(crystal.Coordinates);
-            }
-        }
-
-        private void PlayExplosionLine(List<Crystal> crystals)
-        {
-            var isVertical = !Mathf.Approximately(crystals[0].transform.position.y, crystals[1].transform.position.y);
-            var firstPosition = crystals[0].transform.position;
-
-            foreach (var crystal in crystals)
-            {
-                if (crystal.transform.position.x < firstPosition.x || 
-                    crystal.transform.position.y < firstPosition.y)
-                {
-                    firstPosition = crystal.transform.position;
-                }
-            }
-
-            var explosion = lineExplosionAnimationPool.Get();
-            explosion.transform.position = firstPosition;
-            explosion.SetColor(_dragShape.CrystalColor);
-            if (isVertical)
-            {
-                explosion.PlayVerticalAnimation();
-            }
-            else
-            {
-                explosion.PlayHorizontalAnimation();
-            }
-
-            explosion.OnComplete = () =>
-            {
-                lineExplosionAnimationPool.Release(explosion); 
-            };
-        }
-
+        
         private void OnDragShape(Shape shape, Vector3 pointShape)
         {
             _dragShape = shape;
             _isCanSetShape = gameBoard.SetTempShape(shape, pointShape);
         }
 
-        private void Start()
-        {
-            panelDragShapes.CreateNewShapes();
-        }
+        
         
         public void DebugInitLevel(IntGrid grid)
         {

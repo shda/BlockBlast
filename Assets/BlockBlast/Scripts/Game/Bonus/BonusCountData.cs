@@ -11,8 +11,7 @@ namespace BlockBlast.Scripts.Game.Bonus
         public IntReactiveProperty CountChangeShapeBonus { get; set; } = new();
 
         [SerializeField] private int startCount = 1;
-
-
+        
         private void Awake()
         {
             CountRotateBonus.Value = startCount;

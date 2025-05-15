@@ -16,14 +16,14 @@ namespace BlockBlast.Scripts.Game.Bonus.ChangeShape
             changeShapeUi.ShowBonusUi(panelDragShapes.Shapes);
             changeShapeUi.OnPressChangeShape = shape =>
             {
-                bonusCountData.CountChangeShapeBonus.Value--;
-                
                 panelDragShapes.ChangeShape(shape);
                 
                 dragShapeHandler.IsDragDisable = false;
                 changeShapeUi.HideBonusUi();
                 
                 OnComplete?.Invoke();
+                
+                bonusCountData.CountChangeShapeBonus.Value--;
             };
         }
 

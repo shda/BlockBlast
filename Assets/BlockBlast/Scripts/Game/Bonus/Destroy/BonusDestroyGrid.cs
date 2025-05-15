@@ -53,14 +53,19 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
 
                 if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
-                    DestroyCrystalsByStartPoint(point - new Vector2Int(1, 1), destroySize);
+                    bool isChange = DestroyCrystalsByStartPoint(point - new Vector2Int(1, 1), destroySize);
                     StopBonus();
                     OnComplete?.Invoke();
+
+                    if (isChange)
+                    {
+                        bonusCountData.CountDestroyBonus.Value--;
+                    }
                 }
             }
         }
 
-        private void DestroyCrystalsByStartPoint(Vector2Int startPos, Vector2Int size)
+        private bool  DestroyCrystalsByStartPoint(Vector2Int startPos, Vector2Int size)
         {
             bool isChange = false;
             for (int x = 0; x < size.x; x++)
@@ -83,10 +88,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
                 }
             }
             
-            if (isChange)
-            {
-                bonusCountData.CountDestroyBonus.Value--;
-            }
+            return isChange;
         }
     }
 }

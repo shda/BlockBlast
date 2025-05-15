@@ -96,10 +96,6 @@ namespace BlockBlast.Scripts.Game
             {
                 for (int y = 0; y < boardGridSettings.GridSize.y; y++)
                 {
-                    var crystal = Crystals[x, y];
-                    if(crystal)
-                        continue;
-
                     if (CheckCanInsertShape(x , y , shape))
                     {
                         return new Vector2(x , y);
