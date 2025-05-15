@@ -65,5 +65,19 @@ namespace BlockBlast.Scripts.Game
                 }
             }
         }
+
+        public int[,] GetMatrix()
+        {
+            int[,] matrix = new int[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    matrix[x , y]  = this[x, y];
+                }
+            }
+
+            return matrix;
+        }
     }
 }

@@ -11,15 +11,24 @@ namespace BlockBlast.Scripts.Game
         private readonly List<Crystal> _crystals = new ();
         public IntGrid Grid => grid;
         public Vector2 Size => collider2d.size;
-        
         public Vector3 ColliderSize => collider2d.size;
         
         public int CrystalColor { get; private set; }
 
+        private CrystalPool _crystalPool; 
+        private GameBoardGridSettings _boardGridSettings;
+        private int _indexColor;
+        
         public void CreateCrystals(
             CrystalPool crystalPool,
             GameBoardGridSettings boardGridSettings , int indexColor = 0)
         {
+            _crystalPool = crystalPool;
+            _boardGridSettings = boardGridSettings;
+            _indexColor = indexColor;
+            
+            ReleaseCrystals(crystalPool);
+            
             var step = boardGridSettings.GridStep;
 
             CrystalColor = indexColor;
@@ -41,6 +50,11 @@ namespace BlockBlast.Scripts.Game
                 }
 
             ResizeCollider(grid.width , grid.height);
+        }
+        
+        private void CreateCrystals()
+        {
+            CreateCrystals(_crystalPool, _boardGridSettings , _indexColor);
         }
 
         private void ResizeCollider(
@@ -67,6 +81,32 @@ namespace BlockBlast.Scripts.Game
         public void SetMatrix(int[,] matrix)
         {
             grid.SetMatrix(matrix);
+        }
+
+        public void RotateShapeCounterClockwise()
+        {
+            var matrix = grid.GetMatrix();
+            var newMatrix = RotateMatrixCounterClockwise(matrix);
+            grid.SetMatrix(newMatrix);
+            
+            CreateCrystals();
+        }
+
+        private static int[,] RotateMatrixCounterClockwise(int[,] matrix)
+        {
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+            int[,] rotated = new int[cols, rows];
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    rotated[cols - 1 - j, i] = matrix[i, j];
+                }
+            }
+
+            return rotated;
         }
     }
 }

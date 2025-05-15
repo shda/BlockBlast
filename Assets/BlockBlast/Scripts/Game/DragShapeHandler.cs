@@ -11,6 +11,8 @@ namespace BlockBlast.Scripts.Game
         
         public Action<Shape, Vector3> OnDragShape;
         public Action OnCompleteDragShape;
+        
+        public bool IsDragDisable {get; set;}
 
         private bool _isDrag;
         private Shape _selectedShape;
@@ -23,6 +25,9 @@ namespace BlockBlast.Scripts.Game
         
         private void Update()
         {
+            if (IsDragDisable)
+                return;
+            
             if(_isShapeMovingToStartPositon)
                 return;
             
