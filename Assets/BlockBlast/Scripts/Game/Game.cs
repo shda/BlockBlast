@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
+using BlockBlast.Scripts.Game.Bonus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -17,6 +16,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private GameOverScreen  gameOverScreen;
         [SerializeField] private LineExplosionAnimationPool lineExplosionAnimationPool;
         [SerializeField] private ScoreLabes scoreLabes;
+        [SerializeField] private BonusHandler bonusHandler;
 
         private bool _isCanSetShape;
         private Shape _dragShape;
@@ -79,14 +79,15 @@ namespace BlockBlast.Scripts.Game
             
             var crystalsHide = new HashSet<Crystal>();
             
-            CheckLines(true); // Проверка строк
-            CheckLines(false); // Проверка столбцов
-
+            var lines = CheckLines(true); // Проверка строк
+            lines += CheckLines(false); // Проверка столбцов
+            bonusHandler.FullLineRemove(lines);
             RemovingCrystalsLine(crystalsHide);
             
             
-            void CheckLines(bool isRow)
-            {
+            int  CheckLines(bool isRow)
+            { 
+                int countLines = 0;
                 for (var i = 0; i < (isRow ? size.x : size.y); i++)
                 {
                     var crystals = new List<Crystal>();
@@ -112,10 +113,13 @@ namespace BlockBlast.Scripts.Game
                         {
                             crystalsHide.Add(crystal);
                         }
-                        
+
+                        countLines++;
                         PlayExplosionLine(crystals);
                     }
                 }
+
+                return countLines;
             }
         }
 

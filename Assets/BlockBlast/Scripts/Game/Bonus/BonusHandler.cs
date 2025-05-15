@@ -7,6 +7,7 @@ namespace BlockBlast.Scripts.Game.Bonus
 {
     public class BonusHandler : MonoBehaviour
     {
+        [SerializeField] private BonusCountData bonusCountData;
         [SerializeField] private Toggle[] togges;
 
         private BonusBase _activeBonus;
@@ -28,8 +29,16 @@ namespace BlockBlast.Scripts.Game.Bonus
                 _activeBonus = null;
                 return;
             }
-
-
+            
+            if (!bonusBase.IsCanUsingBonus())
+            {
+                foreach (var toggle in togges)
+                {
+                    toggle.SetIsOnWithoutNotify(false);
+                }
+                return;
+            }
+            
             _activeBonus = bonusBase;
             _activeBonus.StartBonus();
             
@@ -40,6 +49,27 @@ namespace BlockBlast.Scripts.Game.Bonus
                     toggle.SetIsOnWithoutNotify(false);
                 }
             };
+        }
+
+        public void FullLineRemove(int lines)
+        {
+            if(lines == 0)
+                return;
+
+            if (lines == 2)
+            {
+                bonusCountData.CountRotateBonus.Value++;
+            }
+            
+            if (lines == 3)
+            {
+                bonusCountData.CountDestroyBonus.Value++;
+            }
+            
+            if (lines > 3)
+            {
+                bonusCountData.CountChangeShapeBonus.Value++;
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ namespace BlockBlast.Scripts.Game.Bonus.ChangeShape
             changeShapeUi.ShowBonusUi(panelDragShapes.Shapes);
             changeShapeUi.OnPressChangeShape = shape =>
             {
+                bonusCountData.CountChangeShapeBonus.Value--;
+                
                 panelDragShapes.ChangeShape(shape);
                 
                 dragShapeHandler.IsDragDisable = false;
@@ -29,6 +31,11 @@ namespace BlockBlast.Scripts.Game.Bonus.ChangeShape
         {
             dragShapeHandler.IsDragDisable = false;
             changeShapeUi.HideBonusUi();
+        }
+
+        public override bool IsCanUsingBonus()
+        {
+            return bonusCountData.CountChangeShapeBonus.Value > 0;
         }
     }
 }

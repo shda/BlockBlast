@@ -8,12 +8,15 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
         [SerializeField] private PanelDragShapes panelDragShapes;
         [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private BonusRotateUi  bonusRotateUi;
+         
         
         [Button]
         public override void StartBonus()
         {
             dragShapeHandler.IsDragDisable = true;
             bonusRotateUi.ShowBonusUi(panelDragShapes.Shapes);
+
+            bool isChange = false;
             
             bonusRotateUi.OnPressApply = shape =>
             {
@@ -24,6 +27,12 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
 
             bonusRotateUi.OnPressRotate = shape =>
             {
+                if (!isChange)
+                {
+                    isChange = true;
+                    bonusCountData.CountRotateBonus.Value--;
+                }
+                
                 shape.RotateShapeCounterClockwise();
             };
         }
@@ -33,6 +42,11 @@ namespace BlockBlast.Scripts.Game.Bonus.Rotate
         {
             dragShapeHandler.IsDragDisable = false;
             bonusRotateUi.HideBonusUi();
+        }
+
+        public override bool IsCanUsingBonus()
+        {
+            return bonusCountData.CountRotateBonus.Value > 0;
         }
     }
 }

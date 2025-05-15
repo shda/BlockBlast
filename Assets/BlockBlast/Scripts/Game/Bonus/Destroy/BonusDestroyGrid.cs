@@ -34,6 +34,11 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
             _isDrag = false;
         }
 
+        public override bool IsCanUsingBonus()
+        {
+            return bonusCountData.CountDestroyBonus.Value > 0;
+        }
+
         private void Update()
         {
             if (_isDrag)
@@ -57,6 +62,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
 
         private void DestroyCrystalsByStartPoint(Vector2Int startPos, Vector2Int size)
         {
+            bool isChange = false;
             for (int x = 0; x < size.x; x++)
             {
                 for (int y = 0; y < size.y; y++)
@@ -65,6 +71,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
                     var crystal = gameBoard.GetCrystalToPoint(coord);
                     if (crystal)
                     {
+                        isChange = true;
                         crystal.PlayAnimationHide(() =>
                         {
                             crystalPool.Release(crystal);
@@ -74,6 +81,11 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
                         gameBoard.ClearPoint(crystal.Coordinates);
                     }
                 }
+            }
+            
+            if (isChange)
+            {
+                bonusCountData.CountDestroyBonus.Value--;
             }
         }
     }
