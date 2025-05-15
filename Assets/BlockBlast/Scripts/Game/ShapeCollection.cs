@@ -57,5 +57,15 @@ namespace BlockBlast.Scripts.Game
             
             return tempList.GetRange(0, count);
         }
+
+        public void SetSimpleFromShapeMaker(List<Shape> createShapes)
+        {
+            sampleBlocks = createShapes.ToArray();
+        }
+        
+        public void SetHardFromShapeMaker(List<Shape> createShapes)
+        {
+            hardBlocks = createShapes.ToArray();
+        }
     }
 }

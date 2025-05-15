@@ -12,7 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8178567a2ca041e18f58c621653c2394, type: 3}
   m_Name: ShapeMaker
   m_EditorClassIdentifier: 
+  shapeCollection: {fileID: 11400000, guid: 9f9d0822bf7a45d44af2d12f2f2ad0e4, type: 2}
   shapePrefab: {fileID: 4827847352626297082, guid: a427c8d4ece6e574d82a955220e7e9ce, type: 3}
+  sampleBlocks:
+    parsingText: {fileID: 4900000, guid: 2b19beed4801c5346aa54563cef523a4, type: 3}
+    folderSavePrefabs: {fileID: 102900000, guid: 416ff214040bb0e40a85883655fd0565, type: 3}
+  hardBlocks:
+    parsingText: {fileID: 4900000, guid: eeeb400f88500d845941bb80292b4f8f, type: 3}
+    folderSavePrefabs: {fileID: 102900000, guid: 12ce35b6e417a854a96639e57936e9f3, type: 3}
   shapeData:
   - parsingText: {fileID: 4900000, guid: eeeb400f88500d845941bb80292b4f8f, type: 3}
     folderSavePrefabs: {fileID: 102900000, guid: 12ce35b6e417a854a96639e57936e9f3, type: 3}
