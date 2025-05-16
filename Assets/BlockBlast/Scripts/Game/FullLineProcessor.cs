@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlockBlast.Scripts.Game
 {
-    public class FullLineHandler : MonoBehaviour
+    public class FullLineProcessor : MonoBehaviour
     {
         [SerializeField] private GameBoard gameBoard;
         [SerializeField] private GameBoardGridSettings boardGridSettings;

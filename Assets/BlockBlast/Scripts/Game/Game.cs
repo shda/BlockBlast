@@ -5,6 +5,7 @@ using TriInspector;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace BlockBlast.Scripts.Game
 {
@@ -18,7 +19,7 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private LineExplosionAnimationPool lineExplosionAnimationPool;
         [SerializeField] private ScoreLabes scoreLabes;
         [SerializeField] private BonusCountData bonusCountData;
-        [SerializeField] private FullLineHandler fullLineHandler;
+        [SerializeField] private FullLineProcessor fullLineProcessor;
         
         private bool _isCanSetShape;
         private Shape _dragShape;
@@ -74,7 +75,7 @@ namespace BlockBlast.Scripts.Game
                 gameBoard.RemoveTempShape();
 
                 panelDragShapes.RemoveShape(_dragShape);
-                fullLineHandler.CheckFullLines(_dragShape);
+                fullLineProcessor.CheckFullLines(_dragShape);
                 
                 DelayedCheckGameOverAsync();
             }
