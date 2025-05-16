@@ -31,6 +31,7 @@ namespace BlockBlast.Scripts.Game.Bonus.ChangeShape
                 };
                 
                 buttonsRotate.transform.parent = transform;
+                buttonsRotate.transform.localScale = Vector3.one;
                 buttonsRotate.SetFallowTransform(shape.transform);
                 
                 _buttonsRotates.Add(buttonsRotate);

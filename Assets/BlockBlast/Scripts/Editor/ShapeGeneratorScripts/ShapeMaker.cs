@@ -22,6 +22,8 @@ namespace BlockBlast.Scripts.Editor.ShapeGeneratorScripts
         {
             shapeCollection.SetSimpleFromShapeMaker(CreateShapes(sampleBlocks));
             shapeCollection.SetHardFromShapeMaker(CreateShapes(hardBlocks));
+            
+            EditorUtility.SetDirty(shapeCollection);
         }
 
         private List<Shape> CreateShapes(ShapeGeneratorData data)

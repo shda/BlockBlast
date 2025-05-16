@@ -20,8 +20,3 @@ MonoBehaviour:
   hardBlocks:
     parsingText: {fileID: 4900000, guid: eeeb400f88500d845941bb80292b4f8f, type: 3}
     folderSavePrefabs: {fileID: 102900000, guid: 12ce35b6e417a854a96639e57936e9f3, type: 3}
-  shapeData:
-  - parsingText: {fileID: 4900000, guid: eeeb400f88500d845941bb80292b4f8f, type: 3}
-    folderSavePrefabs: {fileID: 102900000, guid: 12ce35b6e417a854a96639e57936e9f3, type: 3}
-  - parsingText: {fileID: 4900000, guid: 2b19beed4801c5346aa54563cef523a4, type: 3}
-    folderSavePrefabs: {fileID: 102900000, guid: 416ff214040bb0e40a85883655fd0565, type: 3}

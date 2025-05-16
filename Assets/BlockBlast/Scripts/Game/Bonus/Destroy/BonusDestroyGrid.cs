@@ -43,26 +43,53 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
         {
             if (_isDrag)
             {
-                var mouseWorldPos = cam.ScreenToWorldPoint(Input.mousePosition);
-                var startGrid = boardGridSettings.transform.position;
-                var point = gameBoard.GetCoordNearestPointByWorldPoint(mouseWorldPos);
-
-                var position = startGrid + (Vector3)(point * boardGridSettings.GridStep);
-
-                dragRect.transform.position = position;
-
-                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                if (Input.touchPressureSupported)
                 {
-                    bool isChange = DestroyCrystalsByStartPoint(point - new Vector2Int(1, 1), destroySize);
-                    StopBonus();
-                    OnComplete?.Invoke();
-
-                    if (isChange)
+                    if (Input.GetTouch(0).phase == TouchPhase.Moved)
                     {
-                        bonusCountData.CountDestroyBonus.Value--;
+                        UpdatePositonDragRect();
+                    }
+                    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                    {
+                        CompleteMoving();
+                    }
+                }
+                else
+                {
+                    UpdatePositonDragRect();
+                    if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                    {
+                        CompleteMoving();
                     }
                 }
             }
+        }
+
+        private void CompleteMoving()
+        {
+            var mouseWorldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+            var point = gameBoard.GetCoordNearestPointByWorldPoint(mouseWorldPos);
+            
+            bool isChange = DestroyCrystalsByStartPoint(point - new Vector2Int(1, 1), destroySize);
+            StopBonus();
+            OnComplete?.Invoke();
+
+            if (isChange)
+            {
+                bonusCountData.CountDestroyBonus.Value--;
+            }
+        }
+
+
+        private void UpdatePositonDragRect()
+        {
+            var mouseWorldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+            var startGrid = boardGridSettings.transform.position;
+            var point = gameBoard.GetCoordNearestPointByWorldPoint(mouseWorldPos);
+
+            var position = startGrid + (Vector3)(point * boardGridSettings.GridStep);
+
+            dragRect.transform.position = position;
         }
 
         private bool  DestroyCrystalsByStartPoint(Vector2Int startPos, Vector2Int size)
