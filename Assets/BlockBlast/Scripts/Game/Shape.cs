@@ -49,7 +49,7 @@ namespace BlockBlast.Scripts.Game
                     }
                 }
 
-            ResizeCollider(grid.width , grid.height);
+           // ResizeCollider(grid.width , grid.height);
         }
         
         private void CreateCrystals()

@@ -15,20 +15,20 @@ namespace BlockBlast.Scripts.Game
         [SerializeField] private PanelDragShapes panelDragShapes;
         [SerializeField] private DragShapeHandler dragShapeHandler;
         [SerializeField] private CrystalPool crystalPool;
-        [SerializeField] private GameOverScreen  gameOverScreen; 
+        [SerializeField] private GameOverScreen gameOverScreen;
         [SerializeField] private LineExplosionAnimationPool lineExplosionAnimationPool;
         [SerializeField] private ScoreLabes scoreLabes;
         [SerializeField] private BonusCountData bonusCountData;
         [SerializeField] private FullLineProcessor fullLineProcessor;
-        
+
         private bool _isCanSetShape;
         private Shape _dragShape;
-        
+
         private void Start()
         {
             gameOverScreen.Hide();
             panelDragShapes.CreateNewShapes();
-            
+
             ConnectEvents();
             ConnectBonusEvents();
         }
@@ -37,7 +37,7 @@ namespace BlockBlast.Scripts.Game
         {
             bonusCountData.CountChangeShapeBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
             bonusCountData.CountDestroyBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
-           bonusCountData.CountRotateBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
+            bonusCountData.CountRotateBonus.Subscribe(OnChangeCountBonuses).AddTo(this);
         }
 
         private void OnChangeCountBonuses(int count)
@@ -49,7 +49,7 @@ namespace BlockBlast.Scripts.Game
         private async void DelayedCheckGameOverAsync()
         {
             await UniTask.DelayFrame(2);
-            if (!IsFindFreeSpaceForShape() && 
+            if (!IsFindFreeSpaceForShape() &&
                 !IsCanUsingBonus())
             {
                 ShowGameOver();
@@ -60,11 +60,8 @@ namespace BlockBlast.Scripts.Game
         {
             dragShapeHandler.OnDragShape = OnDragShape;
             dragShapeHandler.OnCompleteDragShape = OnCompleteDragShape;
-            
-            gameOverScreen.OnRestartGame = () =>
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            };
+
+            gameOverScreen.OnRestartGame = () => { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); };
         }
 
         private void OnCompleteDragShape()
@@ -76,7 +73,7 @@ namespace BlockBlast.Scripts.Game
 
                 panelDragShapes.RemoveShape(_dragShape);
                 fullLineProcessor.CheckFullLines(_dragShape);
-                
+
                 DelayedCheckGameOverAsync();
             }
             else
@@ -89,10 +86,10 @@ namespace BlockBlast.Scripts.Game
         {
             scoreLabes.UpdateBestScore();
             gameOverScreen.Show();
-            
+
             Debug.Log("ShowGameOver");
         }
-        
+
         private bool IsFindFreeSpaceForShape()
         {
             return panelDragShapes.Shapes.Any(shape => gameBoard.FindFreeSpaceOnBoard(shape) != null);
@@ -100,18 +97,17 @@ namespace BlockBlast.Scripts.Game
 
         private bool IsCanUsingBonus()
         {
-            return bonusCountData.CountChangeShapeBonus.Value > 0 || 
+            return bonusCountData.CountChangeShapeBonus.Value > 0 ||
                    bonusCountData.CountDestroyBonus.Value > 0;
         }
-        
+
         private void OnDragShape(Shape shape, Vector3 pointShape)
         {
             _dragShape = shape;
             _isCanSetShape = gameBoard.SetTempShape(shape, pointShape);
         }
 
-        
-        
+
         public void DebugInitLevel(IntGrid grid)
         {
             gameBoard.DebugInitLevel(grid);
