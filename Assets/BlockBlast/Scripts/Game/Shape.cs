@@ -10,7 +10,7 @@ namespace BlockBlast.Scripts.Game
 
         private readonly List<Crystal> _crystals = new ();
         public IntGrid Grid => grid;
-        public Vector2 Size => collider2d.size;
+        public Vector2 Size => new(grid.width , grid.height);
         public Vector3 ColliderSize => collider2d.size;
         
         public int CrystalColor { get; private set; }
@@ -48,7 +48,7 @@ namespace BlockBlast.Scripts.Game
                         _crystals.Add(newCristal);
                     }
                 }
-
+            
            // ResizeCollider(grid.width , grid.height);
         }
         

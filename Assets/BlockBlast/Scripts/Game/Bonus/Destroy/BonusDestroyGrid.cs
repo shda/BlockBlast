@@ -7,7 +7,7 @@ namespace BlockBlast.Scripts.Game.Bonus.Destroy
 {
     public class BonusDestroyGrid : BonusBase
     {
-        [SerializeField] private Vector2Int destroySize = new Vector2Int(3, 3);
+        [SerializeField] private Vector2Int destroySize = new(3, 3);
 
         [SerializeField] private CrystalPool crystalPool;
         [SerializeField] private GameBoard gameBoard;

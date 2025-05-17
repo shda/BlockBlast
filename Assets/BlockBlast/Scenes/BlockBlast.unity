@@ -1458,6 +1458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   desired: 9.96
+  minMaxCameraSize: {x: 0, y: 32}
   camera: {fileID: 519420031}
 --- !u!1 &550083487
 GameObject:
@@ -1517,7 +1518,7 @@ MonoBehaviour:
   lineExplosionAnimationPool: {fileID: 374558810}
   scoreLabes: {fileID: 393948907}
   bonusCountData: {fileID: 1745828377}
-  fullLineHandler: {fileID: 550083490}
+  fullLineProcessor: {fileID: 550083490}
 --- !u!114 &550083490
 MonoBehaviour:
   m_ObjectHideFlags: 0

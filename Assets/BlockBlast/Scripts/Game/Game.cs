@@ -48,7 +48,7 @@ namespace BlockBlast.Scripts.Game
         [Button]
         private async void DelayedCheckGameOverAsync()
         {
-            await UniTask.DelayFrame(2);
+            await UniTask.Delay(100);
             if (!IsFindFreeSpaceForShape() &&
                 !IsCanUsingBonus())
             {
